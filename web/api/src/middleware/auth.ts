@@ -8,7 +8,7 @@ interface IPayload extends jwt.JwtPayload {
   name: string;
 }
 
-export class auth {
+export class Auth {
   handle = async (
     req: Request,
     res: Response,

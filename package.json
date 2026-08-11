@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "express-xss-sanitizer": "^2.0.2",
+    "xss": "^1.0.15"
+  }
+}
