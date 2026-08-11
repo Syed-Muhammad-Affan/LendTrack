@@ -28,4 +28,4 @@ const ItemSchema = new mongoose.Schema<IItem>(
   { timestamps: true },
 );
 
-export default mongoose.model('Item', ItemSchema);
+export default mongoose.model<IItem>('Item', ItemSchema);

@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { ILoan } from '../interface/loan.interface.js';
 
 const LoanSchema = new Schema<ILoan>(
@@ -43,3 +43,5 @@ const LoanSchema = new Schema<ILoan>(
   },
   { timestamps: true },
 );
+
+export default mongoose.model<ILoan>('Loan', LoanSchema);
