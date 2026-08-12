@@ -16,21 +16,18 @@ export class UserRepository implements IUserRepository {
     return await User.findOne({ email });
   }
 
-  async getSingleUserById(id: string | Types.ObjectId): Promise<IUser | null> {
+  async getSingleUserById(id: string): Promise<IUser | null> {
     return await User.findById(id);
   }
 
-  async updateUser(
-    id: Types.ObjectId,
-    body: Partial<IUser>,
-  ): Promise<IUser | null> {
+  async updateUser(id: string, body: Partial<IUser>): Promise<IUser | null> {
     return await User.findByIdAndUpdate(id, body, {
       runValidators: true,
       returnDocument: 'after',
     });
   }
 
-  async deleteUser(id: Types.ObjectId): Promise<IUser | null> {
+  async deleteUser(id: string): Promise<IUser | null> {
     return await User.findByIdAndDelete(id);
   }
 }
