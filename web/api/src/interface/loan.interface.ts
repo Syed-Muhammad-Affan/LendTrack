@@ -5,7 +5,7 @@ export interface ILoan extends Document {
   itemId: Types.ObjectId;
   contactId: Types.ObjectId;
   direction: 'lent_out' | 'borrowed';
-  status: 'active' | 'pending' | 'overdue' | 'lost';
+  status: 'active' | 'returned' | 'overdue' | 'lost';
   loanedAt: Date;
   expectedReturnAt: Date;
   returnAt: Date | null;

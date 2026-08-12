@@ -25,7 +25,7 @@ const LoanSchema = new Schema<ILoan>(
     },
     status: {
       type: String,
-      enum: ['active', 'pending', 'overdue', 'lost'],
+      enum: ['active', 'returned', 'overdue', 'lost'],
       default: 'active',
     },
     loanedAt: {
