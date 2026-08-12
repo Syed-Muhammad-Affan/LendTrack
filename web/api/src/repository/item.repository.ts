@@ -1,6 +1,6 @@
 import { IItem } from '../interface/item.interface.js';
 import Item from '../models/Item.js';
-import { IItemRepository } from './interface/itemRepo.interface.js';
+import { IItemRepository } from './interface/item.repository.interface.js';
 
 export class ItemRepository implements IItemRepository {
   async createItem(body: Partial<IItem>): Promise<IItem> {

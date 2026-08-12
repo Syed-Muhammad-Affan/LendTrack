@@ -1,6 +1,6 @@
 import { IContact } from '../interface/contact.interface.js';
 import Contact from '../models/Contact.js';
-import { IContactRepository } from './interface/contactRepo.interface.js';
+import { IContactRepository } from './interface/contact.repository.interface.js';
 
 export class ContactRepository implements IContactRepository {
   async createContact(body: Partial<IContact>): Promise<IContact> {
