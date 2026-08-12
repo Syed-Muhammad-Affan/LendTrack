@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface IItem extends Document {
   name: string;
@@ -7,4 +7,5 @@ export interface IItem extends Document {
   description: string;
   createdAt: string;
   updatedAt: string;
+  userId: Types.ObjectId;
 }
