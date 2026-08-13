@@ -33,8 +33,8 @@ const UserSchema = new mongoose.Schema<IUser>(
 );
 
 UserSchema.methods.createJWT = function () {
-  return jwt.sign({ id: this._id, name: this.name }, config.JWT_SECRET, {
-    expiresIn: config.JWT_LIFETIME,
+  return jwt.sign({ id: this._id, name: this.name }, config.jwt.secret, {
+    expiresIn: config.jwt.lifetime,
   });
 };
 

@@ -1,14 +1,15 @@
 import app from './app.js';
 import dotenv from 'dotenv';
 import connectDB from './db/connect.js';
+import { config } from './config/config.js';
 
 dotenv.config();
 
-const port = Number(process.env.PORT) || 3000;
+const port = config.server.port;
 
 const start = async () => {
   try {
-    const mongoURI = process.env.MONGO_URI;
+    const mongoURI = config.database.mongoUri;
 
     if (!mongoURI) {
       throw new Error('MONGO_URI is missing');

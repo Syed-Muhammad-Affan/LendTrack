@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import errors from '../errors/index.js';
 import { Unauthenticated } from '../errors/unauthenticated.js';
 import jwt from 'jsonwebtoken';
+import { config } from '../config/config.js';
 
 interface IPayload extends jwt.JwtPayload {
   id: string;
@@ -29,7 +30,7 @@ export class Auth {
     try {
       const payload = jwt.verify(
         token,
-        process.env.JWT_SECRET as string,
+        config.jwt.secret as string,
       ) as unknown as IPayload;
 
       req.user = {
