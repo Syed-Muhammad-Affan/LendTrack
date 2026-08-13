@@ -1,5 +1,6 @@
 import { BadRequest } from '../../errors/bad-request.js';
 import { Unauthenticated } from '../../errors/unauthenticated.js';
+import { IMailerService } from '../../mail/interface/mailer.service.interface.js';
 import { IUserRepository } from '../../repository/interface/user.repository.interface.js';
 import { IAuthService } from './interface/auth.service.interface.js';
 import { AuthResponse } from './interface/authResponse.interface.js';
@@ -7,10 +8,16 @@ import { ILoginDTO } from './interface/loginDTO.interface.js';
 import { IRegisterDTO } from './interface/registerDTO.interface.js';
 
 export class AuthService implements IAuthService {
-  constructor(private readonly UserRepository: IUserRepository) {}
+  constructor(
+    private readonly UserRepository: IUserRepository,
+    private readonly MailerService: IMailerService,
+  ) {}
 
   async register(data: IRegisterDTO): Promise<AuthResponse> {
     const user = await this.UserRepository.createUser(data);
+
+    await this.MailerService.sendWelcomeEmail(user.email, user.name);
+
     const token = user.createJWT();
 
     return {
