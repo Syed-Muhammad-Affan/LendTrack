@@ -5,7 +5,6 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import cors from 'cors';
 import xss from 'xss-clean';
-import { AuthRoute } from './routes/auth.routes.js';
 import { createAuthModule } from './container.ts/auth.container.js';
 
 const errorHandler = new ErrorHandler();
