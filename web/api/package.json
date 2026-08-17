@@ -25,7 +25,8 @@
     "rate-limiter": "^0.2.0",
     "swagger-ui-express": "^5.0.1",
     "xss-clean": "^0.1.1",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

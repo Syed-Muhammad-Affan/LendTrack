@@ -1,9 +1,6 @@
 import app from './app.js';
-import dotenv from 'dotenv';
 import connectDB from './db/connect.js';
 import { config } from './config/config.js';
-
-dotenv.config();
 
 const port = config.server.port;
 

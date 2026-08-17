@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { IAuthController } from '../controllers/interface/auth.controller.interface.js';
-import { validate } from '../middleware/zode.middleware.js';
+import { validate } from '../middleware/zod.middleware.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
 
 export class AuthRoute {
