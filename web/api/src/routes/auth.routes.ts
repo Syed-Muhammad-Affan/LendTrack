@@ -16,13 +16,13 @@ export class AuthRoute {
     this.router.post(
       '/register',
       validate(registerSchema),
-      this.AuthController.register,
+      this.AuthController.register.bind(this.AuthController),
     );
 
     this.router.post(
       '/login',
       validate(loginSchema),
-      this.AuthController.login,
+      this.AuthController.login.bind(this.AuthController),
     );
   }
 }

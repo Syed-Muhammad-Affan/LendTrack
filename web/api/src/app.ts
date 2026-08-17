@@ -4,7 +4,6 @@ import { NotFound } from './middleware/notFound.js';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import cors from 'cors';
-import xss from 'xss-clean';
 import { createAuthModule } from './container.ts/auth.container.js';
 
 const errorHandler = new ErrorHandler();
@@ -24,7 +23,6 @@ app.use(
     max: 100, // limit each IP to 100 requests per windowMs
   }),
 );
-app.use(xss());
 
 // Middleware
 app.use('/api/v1/auth', authRoute.router);

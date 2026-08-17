@@ -7,7 +7,9 @@ export const validate = (schema: z.ZodType) => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      throw new BadRequest('Validation failed', result.error.flatten());
+      console.log('ZOD ERROR:', result.error.flatten());
+
+      return next(new BadRequest('Validation failed', result.error.flatten()));
     }
 
     req.body = result.data;
