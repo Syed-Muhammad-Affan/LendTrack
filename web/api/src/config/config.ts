@@ -14,6 +14,8 @@ const envSchema = z.object({
   MAIL_PASSWORD: z.string().min(1),
 
   APP_URL: z.string(),
+
+  RESET_TOKEN_EXPIRY_MINUTES: z.coerce.number().positive().default(15),
 });
 
 const env = envSchema.parse(process.env);
@@ -41,5 +43,9 @@ export const config = {
 
   app: {
     url: env.APP_URL,
+  },
+
+  resetToken: {
+    expiryMinutes: env.RESET_TOKEN_EXPIRY_MINUTES,
   },
 };

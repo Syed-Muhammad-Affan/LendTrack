@@ -1,9 +1,12 @@
+import { config } from '../../config/config.js';
 import { BadRequest } from '../../errors/bad-request.js';
 import { Unauthenticated } from '../../errors/unauthenticated.js';
 import { IMailerService } from '../../mail/interface/mailer.service.interface.js';
 import { IUserRepository } from '../../repository/interface/user.repository.interface.js';
+import { generateResetToken } from '../../utils/token.js';
 import { IAuthService } from './interface/auth.service.interface.js';
 import { AuthResponse } from './interface/authResponse.interface.js';
+import { IGenericResponse } from './interface/genericResponse.interface.js';
 import { ILoginDTO } from './interface/loginDTO.interface.js';
 import { IRegisterDTO } from './interface/registerDTO.interface.js';
 
@@ -59,5 +62,39 @@ export class AuthService implements IAuthService {
       },
       token,
     };
+  }
+
+  async forgotPassword(email: string): Promise<IGenericResponse> {
+    if (!email) {
+      throw new BadRequest('Email is required');
+    }
+
+    const user = await this.UserRepository.getSingleUserByEmail(email);
+
+    const genericResponse: IGenericResponse = {
+      message: 'If that email exists, a reset link has been sent.',
+    };
+
+    if (!user) {
+      return genericResponse;
+    }
+
+    const { rawToken, tokenHash } = generateResetToken();
+    const expiryMinutes = config.resetToken.expiryMinutes;
+
+    user.resetPasswordExpires = new Date(
+      Date.now() + expiryMinutes * 60 * 1000,
+    );
+    user.resetPasswordTokenHash = tokenHash;
+
+    await user.save();
+
+    try {
+      await this.MailerService.sendResetPasswordEmail(user.email, rawToken);
+    } catch (error) {
+      console.error('Failed to send reset email:', error);
+    }
+
+    return genericResponse;
   }
 }
