@@ -6,6 +6,9 @@ export interface IUserRepository {
   getAllUser(): Promise<IUser[] | null>;
   getSingleUserByEmail(email: string): Promise<IUser | null>;
   getSingleUserById(id: string): Promise<IUser | null>;
+  getSingleUserByResetPasswordToken(
+    resetPasswordTokenHash: string,
+  ): Promise<IUser | null>;
   updateUser(id: string, body: Partial<IUser>): Promise<IUser | null>;
   deleteUser(id: string): Promise<IUser | null>;
 }
