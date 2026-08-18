@@ -29,6 +29,8 @@ const UserSchema = new mongoose.Schema<IUser>(
       minlength: 8,
       maxlenght: 24,
     },
+    resetPasswordTokenHash: { type: String, select: false },
+    resetPasswordExpires: { type: Date, select: false },
   },
   { timestamps: true },
 );
