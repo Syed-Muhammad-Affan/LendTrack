@@ -26,7 +26,7 @@ export class UserRepository implements IUserRepository {
     return await User.findOne({
       resetPasswordTokenHash: resetPasswordTokenHash,
       resetPasswordExpires: { $gt: new Date() },
-    });
+    }).select('+resetPasswordTokenHash +resetPasswordExpires');
   }
 
   async updateUser(id: string, body: Partial<IUser>): Promise<IUser | null> {
