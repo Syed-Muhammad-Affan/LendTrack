@@ -25,4 +25,18 @@ export class MailerService implements IMailerService {
       text: `Hello ${name}, welcome to our application`,
     });
   }
+
+  async sendResetPasswordEmail(to: string, rawToken: string): Promise<void> {
+    const resetUrl = `${config.app.url}/reset-password/${rawToken}`;
+
+    await this.transporter.sendMail({
+      from: config.mail.user,
+      to: to,
+      subject: 'Reset Your Password',
+      html: `<p>You requested a password reset.</p>
+      <p><a href="${resetUrl}">Click here to reset your password</a></p>
+      <p>This link expires in ${process.env.RESET_TOKEN_EXPIRY_MINUTES} minutes.
+      If you didn't request this, ignore this email.</p>`,
+    });
+  }
 }

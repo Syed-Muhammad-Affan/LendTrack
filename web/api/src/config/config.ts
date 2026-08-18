@@ -12,6 +12,8 @@ const envSchema = z.object({
   MAIL_PORT: z.coerce.number().positive(),
   MAIL_USER: z.string().min(1),
   MAIL_PASSWORD: z.string().min(1),
+
+  APP_URL: z.string(),
 });
 
 const env = envSchema.parse(process.env);
@@ -35,5 +37,9 @@ export const config = {
     port: env.MAIL_PORT,
     user: env.MAIL_USER,
     password: env.MAIL_PASSWORD,
+  },
+
+  app: {
+    url: env.APP_URL,
   },
 };
