@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { IAuthController } from '../controllers/interface/auth.controller.interface.js';
 import { validate } from '../middleware/zod.middleware.js';
-import { loginSchema, registerSchema } from '../validators/auth.validator.js';
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  registerSchema,
+} from '../validators/auth.validator.js';
 
 export class AuthRoute {
   public readonly router: Router;
@@ -23,6 +27,12 @@ export class AuthRoute {
       '/login',
       validate(loginSchema),
       this.AuthController.login.bind(this.AuthController),
+    );
+
+    this.router.post(
+      '/forgot-password',
+      validate(forgotPasswordSchema),
+      this.AuthController.forgotPassword.bind(this.AuthController),
     );
   }
 }
