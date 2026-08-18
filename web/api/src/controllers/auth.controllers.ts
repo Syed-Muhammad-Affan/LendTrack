@@ -19,4 +19,12 @@ export class AuthController implements IAuthController {
 
     return res.status(StatusCodes.OK).json(data);
   }
+
+  async forgotPassword(req: Request, res: Response): Promise<Response> {
+    const { email } = req.body;
+
+    const genericResponse = await this.AuthService.forgotPassword(email);
+
+    return res.status(StatusCodes.OK).json(genericResponse);
+  }
 }
