@@ -1,4 +1,4 @@
-import { AuthController } from '../controllers/auth.controllers.js';
+import { AuthController } from '../controllers/auth.controller.js';
 import { MailerService } from '../mail/mailer.service.js';
 import { UserRepository } from '../repository/user.repository.js';
 import { AuthRoute } from '../routes/auth.routes.js';
