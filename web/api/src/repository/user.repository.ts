@@ -36,6 +36,23 @@ export class UserRepository implements IUserRepository {
     });
   }
 
+  async updateUserPasswordAndClearResetToken(
+    id: Types.ObjectId,
+    password: string,
+  ): Promise<void> {
+    await User.findByIdAndUpdate(
+      id,
+      {
+        $set: { password: password },
+        $unset: { resetPasswordExpires: 1, $restoreModifiedPathsSnapshot: 1 },
+      },
+      {
+        runValidators: true,
+        returnDocument: 'after',
+      },
+    );
+  }
+
   async deleteUser(id: string): Promise<IUser | null> {
     return await User.findByIdAndDelete(id);
   }

@@ -10,5 +10,9 @@ export interface IUserRepository {
     resetPasswordTokenHash: string,
   ): Promise<IUser | null>;
   updateUser(id: string, body: Partial<IUser>): Promise<IUser | null>;
+  updateUserPasswordAndClearResetToken(
+    id: Types.ObjectId,
+    password: string,
+  ): Promise<void>;
   deleteUser(id: string): Promise<IUser | null>;
 }
