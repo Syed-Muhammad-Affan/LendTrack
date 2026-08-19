@@ -5,6 +5,7 @@ import {
   forgotPasswordSchema,
   loginSchema,
   registerSchema,
+  resetPasswordSchema,
 } from '../validators/auth.validator.js';
 
 export class AuthRoute {
@@ -33,6 +34,12 @@ export class AuthRoute {
       '/forgot-password',
       validate(forgotPasswordSchema),
       this.AuthController.forgotPassword.bind(this.AuthController),
+    );
+
+    this.router.post(
+      '/reset-password',
+      validate(resetPasswordSchema),
+      this.AuthController.resetPassword.bind(this.AuthController),
     );
   }
 }
