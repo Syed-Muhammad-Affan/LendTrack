@@ -3,7 +3,7 @@ import { IContact } from '../../interface/contact.interface.js';
 
 export interface IContactRepository {
   createContact(body: Partial<IContact>): Promise<IContact>;
-  getAllContact(userId: string): Promise<IContact[] | null>;
+  getAllContact(userId: string): Promise<IContact[]>;
   getSingleContact(contactId: string, userId: string): Promise<IContact | null>;
   updateContact(
     contactTd: string,

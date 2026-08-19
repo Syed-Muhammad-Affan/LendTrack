@@ -7,7 +7,7 @@ export class ContactRepository implements IContactRepository {
     return await Contact.create(body);
   }
 
-  async getAllContact(userId: string): Promise<IContact[] | null> {
+  async getAllContact(userId: string): Promise<IContact[]> {
     return await Contact.find({ userId: userId }).sort('createdAt');
   }
 
