@@ -36,10 +36,6 @@ export class AuthService implements IAuthService {
   async login(data: ILoginDTO): Promise<AuthResponse> {
     const { email, password } = data;
 
-    if (!email || !password) {
-      throw new errors.BadRequest('Please provide email and password');
-    }
-
     const user = await this.UserRepository.getSingleUserByEmail(email);
 
     if (!user) {
@@ -65,10 +61,6 @@ export class AuthService implements IAuthService {
   }
 
   async forgotPassword(email: string): Promise<IGenericResponse> {
-    if (!email) {
-      throw new errors.BadRequest('Email is required');
-    }
-
     const user = await this.UserRepository.getSingleUserByEmail(email);
 
     const genericResponse: IGenericResponse = {
@@ -99,10 +91,6 @@ export class AuthService implements IAuthService {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
-    if (!token || !newPassword) {
-      throw new errors.BadRequest('Please provide token and new password');
-    }
-
     const tokenHash = hashToken(token);
 
     const user =
