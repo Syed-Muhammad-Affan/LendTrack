@@ -1,6 +1,5 @@
 import { config } from '../../config/config.js';
-import { BadRequest } from '../../errors/bad-request.js';
-import { Unauthenticated } from '../../errors/unauthenticated.js';
+import errors from '../../errors/index.js';
 import { IMailerService } from '../../mail/interface/mailer.service.interface.js';
 import { IUserRepository } from '../../repository/interface/user.repository.interface.js';
 import { generateResetToken, hashToken } from '../../utils/token.js';
@@ -38,19 +37,19 @@ export class AuthService implements IAuthService {
     const { email, password } = data;
 
     if (!email || !password) {
-      throw new BadRequest('Please provide email and password');
+      throw new errors.BadRequest('Please provide email and password');
     }
 
     const user = await this.UserRepository.getSingleUserByEmail(email);
 
     if (!user) {
-      throw new Unauthenticated('Invalid Credential');
+      throw new errors.Unauthenticated('Invalid Credential');
     }
 
     const isPasswordCorrect = user.comparePassword(password);
 
     if (!isPasswordCorrect) {
-      throw new Unauthenticated('Invalid Credential');
+      throw new errors.Unauthenticated('Invalid Credential');
     }
 
     const token = user.createJWT();
@@ -67,7 +66,7 @@ export class AuthService implements IAuthService {
 
   async forgotPassword(email: string): Promise<IGenericResponse> {
     if (!email) {
-      throw new BadRequest('Email is required');
+      throw new errors.BadRequest('Email is required');
     }
 
     const user = await this.UserRepository.getSingleUserByEmail(email);
@@ -101,7 +100,7 @@ export class AuthService implements IAuthService {
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
     if (!token || !newPassword) {
-      throw new BadRequest('Please provide token and new password');
+      throw new errors.BadRequest('Please provide token and new password');
     }
 
     const tokenHash = hashToken(token);
@@ -110,7 +109,7 @@ export class AuthService implements IAuthService {
       await this.UserRepository.getSingleUserByResetPasswordToken(tokenHash);
 
     if (!user) {
-      throw new BadRequest('Token is invalid or token is expired');
+      throw new errors.BadRequest('Token is invalid or token is expired');
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
