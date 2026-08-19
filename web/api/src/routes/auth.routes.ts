@@ -6,6 +6,7 @@ import {
   loginSchema,
   registerSchema,
   resetPasswordSchema,
+  tokenParamsSchema,
 } from '../validators/auth.validator.js';
 import { forgotPasswordLimiter } from '../middleware/forgotPasswordLimiter.middleware.js';
 
@@ -21,26 +22,26 @@ export class AuthRoute {
   private initializeRoutes(): void {
     this.router.post(
       '/register',
-      validate(registerSchema),
+      validate({ body: registerSchema }),
       this.AuthController.register.bind(this.AuthController),
     );
 
     this.router.post(
       '/login',
-      validate(loginSchema),
+      validate({ body: loginSchema }),
       this.AuthController.login.bind(this.AuthController),
     );
 
     this.router.post(
       '/forgot-password',
       forgotPasswordLimiter,
-      validate(forgotPasswordSchema),
+      validate({ body: forgotPasswordSchema }),
       this.AuthController.forgotPassword.bind(this.AuthController),
     );
 
     this.router.post(
       '/reset-password/:token',
-      validate(resetPasswordSchema),
+      validate({ body: registerSchema, params: tokenParamsSchema }),
       this.AuthController.resetPassword.bind(this.AuthController),
     );
   }

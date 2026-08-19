@@ -16,8 +16,11 @@ export const forgotPasswordSchema = z.object({
 });
 
 export const resetPasswordSchema = z.object({
-  token: z.string().min(1),
   newPassword: z.string().min(8).max(24),
+});
+
+export const tokenParamsSchema = z.object({
+  token: z.string().min(1, 'Token is required'),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

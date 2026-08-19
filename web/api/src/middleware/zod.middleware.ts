@@ -1,18 +1,37 @@
 import { NextFunction, Request, Response } from 'express';
-import { BadRequest } from '../errors/bad-request.js';
 import z from 'zod';
+import errors from '../errors/index.js';
 
-export const validate = (schema: z.ZodType) => {
+export const validate = (schemas: { body?: z.ZodType; params?: z.ZodType }) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req.body);
+    if (schemas.body) {
+      const bodyResult = schemas.body.safeParse(req.body);
 
-    if (!result.success) {
-      console.log('ZOD ERROR:', result.error.flatten());
+      if (!bodyResult.success) {
+        return next(
+          new errors.BadRequest(
+            'Validation failed',
+            bodyResult.error.flatten(),
+          ),
+        );
+      }
 
-      return next(new BadRequest('Validation failed', result.error.flatten()));
+      req.body = bodyResult.data;
     }
 
-    req.body = result.data;
+    if (schemas.params) {
+      const paramsResult = schemas.params.safeParse(req.params);
+
+      if (!paramsResult.success) {
+        return next(
+          new errors.BadRequest(
+            'Invalid parameters',
+            paramsResult.error.flatten(),
+          ),
+        );
+      }
+    }
+
     next();
   };
 };
