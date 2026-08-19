@@ -8,4 +8,5 @@ export interface IAuthService {
   register(data: IRegisterDTO): Promise<AuthResponse>;
   login(data: ILoginDTO): Promise<AuthResponse>;
   forgotPassword(email: string): Promise<IGenericResponse>;
+  resetPassword(token: string, newPassword: string): Promise<void>;
 }

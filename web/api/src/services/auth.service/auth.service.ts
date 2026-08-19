@@ -3,12 +3,13 @@ import { BadRequest } from '../../errors/bad-request.js';
 import { Unauthenticated } from '../../errors/unauthenticated.js';
 import { IMailerService } from '../../mail/interface/mailer.service.interface.js';
 import { IUserRepository } from '../../repository/interface/user.repository.interface.js';
-import { generateResetToken } from '../../utils/token.js';
+import { generateResetToken, hashToken } from '../../utils/token.js';
 import { IAuthService } from './interface/auth.service.interface.js';
 import { AuthResponse } from './interface/authResponse.interface.js';
 import { IGenericResponse } from './interface/genericResponse.interface.js';
 import { ILoginDTO } from './interface/loginDTO.interface.js';
 import { IRegisterDTO } from './interface/registerDTO.interface.js';
+import bcrypt from 'bcryptjs';
 
 export class AuthService implements IAuthService {
   constructor(
@@ -96,5 +97,27 @@ export class AuthService implements IAuthService {
     }
 
     return genericResponse;
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    if (!token || !newPassword) {
+      throw new BadRequest('Please provide token and new password');
+    }
+
+    const tokenHash = hashToken(token);
+
+    const user =
+      await this.UserRepository.getSingleUserByResetPasswordToken(tokenHash);
+
+    if (!user) {
+      throw new BadRequest('Token is invalid or token is expired');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    await this.UserRepository.updateUserPasswordAndClearResetToken(
+      user._id,
+      hashedPassword,
+    );
   }
 }
