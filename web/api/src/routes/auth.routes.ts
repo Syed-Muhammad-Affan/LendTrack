@@ -7,6 +7,7 @@ import {
   registerSchema,
   resetPasswordSchema,
 } from '../validators/auth.validator.js';
+import { forgotPasswordLimiter } from '../middleware/forgotPasswordLimiter.middleware.js';
 
 export class AuthRoute {
   public readonly router: Router;
@@ -32,6 +33,7 @@ export class AuthRoute {
 
     this.router.post(
       '/forgot-password',
+      forgotPasswordLimiter,
       validate(forgotPasswordSchema),
       this.AuthController.forgotPassword.bind(this.AuthController),
     );
