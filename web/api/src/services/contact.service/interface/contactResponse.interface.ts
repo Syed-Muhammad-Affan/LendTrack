@@ -2,5 +2,6 @@ export interface IContactResponse {
   id: string;
   name: string;
   email?: string;
-  phoneNumber?: string;
+  phone?: string;
+  notes: string;
 }

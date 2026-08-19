@@ -3,7 +3,6 @@ import { IContactController } from './interface/contact.controller.interface.js'
 import { IContactService } from '../services/contact.service/interface/contact.service.interface.js';
 import errors from '../errors/index.js';
 import { StatusCodes } from 'http-status-codes';
-import { success } from 'zod';
 
 export class ContactController implements IContactController {
   constructor(private readonly ContactService: IContactService) {}

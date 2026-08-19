@@ -20,14 +20,15 @@ export class ContactService implements IContactService {
     const response: IContactResponse = {
       id: contact._id.toString(),
       name: contact.name,
+      notes: contact.notes,
     };
 
     if (contact.email !== undefined) {
       response.email = contact.email;
     }
 
-    if (contact.PhoneNumber !== undefined) {
-      response.phoneNumber = contact.PhoneNumber;
+    if (contact.phone !== undefined) {
+      response.phone = contact.phone;
     }
 
     return response;
@@ -39,11 +40,12 @@ export class ContactService implements IContactService {
     return contacts?.map((contact) => ({
       id: contact._id.toString(),
       name: contact.name,
+      notes: contact.notes,
       ...(contact.email !== undefined && {
         email: contact.email,
       }),
-      ...(contact.PhoneNumber !== undefined && {
-        phoneNumber: contact.PhoneNumber,
+      ...(contact.phone !== undefined && {
+        phone: contact.phone,
       }),
     }));
   }
@@ -64,14 +66,15 @@ export class ContactService implements IContactService {
     const response: IContactResponse = {
       id: contact._id.toString(),
       name: contact.name,
+      notes: contact.notes,
     };
 
     if (contact.email !== undefined) {
       response.email = contact.email;
     }
 
-    if (contact.PhoneNumber !== undefined) {
-      response.phoneNumber = contact.PhoneNumber;
+    if (contact.phone !== undefined) {
+      response.phone = contact.phone;
     }
 
     return response;
@@ -95,14 +98,15 @@ export class ContactService implements IContactService {
     const response: IContactResponse = {
       id: contact._id.toString(),
       name: contact.name,
+      notes: contact.notes,
     };
 
     if (contact.email !== undefined) {
       response.email = contact.email;
     }
 
-    if (contact.PhoneNumber !== undefined) {
-      response.phoneNumber = contact.PhoneNumber;
+    if (contact.phone !== undefined) {
+      response.phone = contact.phone;
     }
 
     return response;
@@ -124,14 +128,15 @@ export class ContactService implements IContactService {
     const response: IContactResponse = {
       id: contact._id.toString(),
       name: contact.name,
+      notes: contact.notes,
     };
 
     if (contact.email !== undefined) {
       response.email = contact.email;
     }
 
-    if (contact.PhoneNumber !== undefined) {
-      response.phoneNumber = contact.PhoneNumber;
+    if (contact.phone !== undefined) {
+      response.phone = contact.phone;
     }
 
     return response;

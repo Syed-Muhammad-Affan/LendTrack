@@ -13,10 +13,16 @@ const ContactSchema = new Schema<IContact>(
       type: String,
       trim: true,
     },
-    PhoneNumber: {
+    phone: {
       type: String,
       trim: true,
     },
+    notes: {
+      type: String,
+      required: [true, 'Please provide notes'],
+      trim: true,
+    },
+
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
