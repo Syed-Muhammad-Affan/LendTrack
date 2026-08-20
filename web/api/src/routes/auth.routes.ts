@@ -41,7 +41,7 @@ export class AuthRoute {
 
     this.router.post(
       '/reset-password/:token',
-      validate({ body: registerSchema, params: tokenParamsSchema }),
+      validate({ body: resetPasswordSchema, params: tokenParamsSchema }),
       this.AuthController.resetPassword.bind(this.AuthController),
     );
   }
