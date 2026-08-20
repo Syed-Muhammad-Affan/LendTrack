@@ -4,7 +4,9 @@ import { NotFound } from './middleware/notFound.js';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import cors from 'cors';
-import { createAuthModule } from './container.ts/auth.container.js';
+import { createAuthModule } from './containers/auth.container.js';
+import { createContactModule } from './containers/contact.container.js';
+import { authMiddleware } from './middleware/auth.js';
 
 const errorHandler = new ErrorHandler();
 const notFound = new NotFound();
@@ -12,6 +14,7 @@ const notFound = new NotFound();
 const app = express();
 
 const authRoute = createAuthModule();
+const contactRoute = createContactModule();
 
 app.set('trust proxy', 1);
 app.use(helmet());
@@ -26,6 +29,7 @@ app.use(
 
 // Middleware
 app.use('/api/v1/auth', authRoute.router);
+app.use('/api/v1/contacts', authMiddleware, contactRoute.router);
 
 app.use(notFound.handle);
 app.use(errorHandler.handle);
