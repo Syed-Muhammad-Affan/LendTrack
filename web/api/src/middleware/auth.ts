@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import errors from '../errors/index.js';
-import { Unauthenticated } from '../errors/unauthenticated.js';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config.js';
 
@@ -9,38 +8,36 @@ interface IPayload extends jwt.JwtPayload {
   name: string;
 }
 
-export class Auth {
-  handle = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    const authHeader = req.headers.authorization;
+export const authMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const authHeader = req.headers.authorization;
 
-    if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) {
-      throw new errors.Unauthenticated('Authentication Invalid');
-    }
+  if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) {
+    throw new errors.Unauthenticated('Authentication Invalid');
+  }
 
-    const token = authHeader.split(' ')[1];
+  const token = authHeader.split(' ')[1];
 
-    if (!token) {
-      throw new Unauthenticated('Authentication Invalid');
-    }
+  if (!token) {
+    throw new errors.Unauthenticated('Authentication Invalid');
+  }
 
-    try {
-      const payload = jwt.verify(
-        token,
-        config.jwt.secret as string,
-      ) as unknown as IPayload;
+  try {
+    const payload = jwt.verify(
+      token,
+      config.jwt.secret as string,
+    ) as unknown as IPayload;
 
-      req.user = {
-        userId: payload.id,
-        name: payload.name,
-      };
+    req.user = {
+      userId: payload.id,
+      name: payload.name,
+    };
 
-      next();
-    } catch (error) {
-      throw new Unauthenticated('Authentication Invalid');
-    }
-  };
-}
+    next();
+  } catch (error) {
+    throw new errors.Unauthenticated('Authentication Invalid');
+  }
+};
