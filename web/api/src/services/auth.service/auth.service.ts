@@ -42,13 +42,23 @@ export class AuthService implements IAuthService {
       throw new errors.Unauthenticated('Invalid Credential');
     }
 
-    const isPasswordCorrect = user.comparePassword(password);
+    console.log('LOGIN USER:', {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+    });
+
+    const isPasswordCorrect = await user.comparePassword(password);
+
+    console.log('PASSWORD MATCH:', isPasswordCorrect);
 
     if (!isPasswordCorrect) {
       throw new errors.Unauthenticated('Invalid Credential');
     }
 
     const token = user.createJWT();
+
+    console.log('NEW TOKEN CREATED FOR:', user._id.toString());
 
     return {
       user: {

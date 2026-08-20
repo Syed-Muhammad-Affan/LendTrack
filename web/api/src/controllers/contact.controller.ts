@@ -57,7 +57,7 @@ export class ContactController implements IContactController {
       userId,
     );
 
-    return res.status(StatusCodes.CREATED).json({
+    return res.status(StatusCodes.OK).json({
       success: true,
       message: 'Contact is obtained',
       data: contact,
@@ -83,7 +83,7 @@ export class ContactController implements IContactController {
       body,
     );
 
-    return res.status(StatusCodes.CREATED).json({
+    return res.status(StatusCodes.OK).json({
       success: true,
       message: 'Contact is updated',
       data: contact,
@@ -104,7 +104,7 @@ export class ContactController implements IContactController {
 
     const contact = await this.ContactService.deleteContact(contactId, userId);
 
-    return res.status(StatusCodes.CREATED).json({
+    return res.status(StatusCodes.OK).json({
       success: true,
       message: 'Contact is deleted',
       data: contact,

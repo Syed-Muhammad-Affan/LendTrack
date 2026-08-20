@@ -44,7 +44,7 @@ export class UserRepository implements IUserRepository {
       id,
       {
         $set: { password: password },
-        $unset: { resetPasswordExpires: 1, $restoreModifiedPathsSnapshot: 1 },
+        $unset: { resetPasswordExpires: 1, resetPasswordTokenHash: 1 },
       },
       {
         runValidators: true,

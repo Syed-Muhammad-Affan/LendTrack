@@ -3,7 +3,6 @@ import { IContact } from '../../interface/contact.interface.js';
 import { IContactService } from './interface/contact.service.interface.js';
 import { IContactRepository } from '../../repository/interface/contact.repository.interface.js';
 import { IContactResponse } from './interface/contactResponse.interface.js';
-import { email } from 'zod';
 import errors from '../../errors/index.js';
 
 export class ContactService implements IContactService {
@@ -92,7 +91,7 @@ export class ContactService implements IContactService {
     );
 
     if (!contact) {
-      throw new errors.Unauthenticated('Contact not found');
+      throw new errors.NotFound('Contact not found');
     }
 
     const response: IContactResponse = {

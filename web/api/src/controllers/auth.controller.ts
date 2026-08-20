@@ -10,13 +10,21 @@ export class AuthController implements IAuthController {
   async register(req: Request, res: Response): Promise<Response> {
     const data = await this.AuthService.register(req.body);
 
-    return res.status(StatusCodes.CREATED).json(data);
+    return res.status(StatusCodes.CREATED).json({
+      success: true,
+      message: 'User register successfully',
+      data: data,
+    });
   }
 
   async login(req: Request, res: Response): Promise<Response> {
     const data = await this.AuthService.login(req.body);
 
-    return res.status(StatusCodes.OK).json(data);
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'User login successfully',
+      data: data,
+    });
   }
 
   async forgotPassword(req: Request, res: Response): Promise<Response> {

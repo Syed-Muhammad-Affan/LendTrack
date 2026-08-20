@@ -42,6 +42,8 @@ UserSchema.methods.createJWT = function () {
 };
 
 UserSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
@@ -49,7 +51,7 @@ UserSchema.pre('save', async function () {
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string,
 ) {
-  const isMatch = bcrypt.compare(this.password, candidatePassword);
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
   return isMatch;
 };
 
