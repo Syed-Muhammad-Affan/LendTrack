@@ -24,6 +24,10 @@ const ItemSchema = new mongoose.Schema<IItem>(
       required: [true, 'Please provide description'],
       trim: true,
     },
+    isArchived: {
+      type: Boolean,
+      default: false,
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',

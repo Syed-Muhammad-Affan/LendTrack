@@ -5,6 +5,7 @@ export interface IItem extends Document {
   category: string;
   photo?: string;
   description: string;
+  isArchived: boolean;
   createdAt: string;
   updatedAt: string;
   userId: Types.ObjectId;
