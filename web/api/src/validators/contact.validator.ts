@@ -8,7 +8,7 @@ export const createContactSchema = z.object({
 });
 
 export const contactParamsSchema = z.object({
-  contactId: z.string().min(1),
+  id: z.string().min(1),
 });
 
 export const updateContactSchema = z
