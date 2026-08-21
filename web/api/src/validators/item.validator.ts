@@ -35,7 +35,7 @@ export const updateItemSchema = z
   );
 
 export const itemIDParamsSchema = z.object({
-  itemId: z.string().min(1),
+  id: z.string().min(1),
 });
 
 export const archiveQuerySchema = z.object({
