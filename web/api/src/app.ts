@@ -15,6 +15,7 @@ const app = express();
 
 const authRoute = createAuthModule();
 const contactRoute = createContactModule();
+const itemRoute = createAuthModule();
 
 app.set('trust proxy', 1);
 app.use(helmet());
@@ -30,6 +31,7 @@ app.use(
 // Middleware
 app.use('/api/v1/auth', authRoute.router);
 app.use('/api/v1/contacts', authMiddleware, contactRoute.router);
+app.use('/api/v1/item', authMiddleware, itemRoute.router);
 
 app.use(notFound.handle);
 app.use(errorHandler.handle);
