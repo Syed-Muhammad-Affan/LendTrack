@@ -1,5 +1,6 @@
 import { IItem } from '../interface/item.interface.js';
 import Item from '../models/Item.js';
+import { IAllItemFilter } from './interface/allItemFilter.interface.js';
 import { IItemRepository } from './interface/item.repository.interface.js';
 
 export class ItemRepository implements IItemRepository {
@@ -7,8 +8,8 @@ export class ItemRepository implements IItemRepository {
     return await Item.create(body);
   }
 
-  async getAllItem(userId: string): Promise<IItem[] | null> {
-    return await Item.find({ userId: userId }).sort('createdAt');
+  async getAllItem(filter: IAllItemFilter): Promise<IItem[]> {
+    return await Item.find(filter).sort('createdAt');
   }
 
   async getSingleItem(itemId: string, userId: string): Promise<IItem | null> {
