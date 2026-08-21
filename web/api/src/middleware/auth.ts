@@ -15,8 +15,6 @@ export const authMiddleware = async (
 ): Promise<void> => {
   const authHeader = req.headers.authorization;
 
-  console.log('Authorization:', authHeader);
-
   if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) {
     throw new errors.Unauthenticated('Authentication Invalid');
   }
@@ -33,14 +31,10 @@ export const authMiddleware = async (
       config.jwt.secret as string,
     ) as unknown as IPayload;
 
-    console.log('JWT payload:', payload);
-
     req.user = {
       userId: payload.id,
       name: payload.name,
     };
-
-    console.log('req.user:', req.user);
 
     next();
   } catch (error) {
