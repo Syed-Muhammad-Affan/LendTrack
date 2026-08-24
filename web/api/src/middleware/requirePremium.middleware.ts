@@ -16,14 +16,7 @@ export async function requirePremium(
     throw new errors.Unauthenticated('Not authenticated');
   }
 
-  const userRepository: IUserRepository = new UserRepository();
-
-  const user = await userRepository.getSingleUserById(userId);
-  if (!user) {
-    throw new errors.Unauthenticated('Not authenticated');
-  }
-
-  if (!isPremium(user)) {
+  if (!isPremium(userId)) {
     return res.status(StatusCodes.FORBIDDEN).json({
       message: 'This feature requires a premium plan',
       code: 'PREMIUM_REQUIRED',
