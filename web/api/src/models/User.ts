@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { config } from '../config/config.js';
 import bcrypt from 'bcryptjs';
 import { IUser } from '../interface/user.interface.js';
+import { bool } from 'joi';
 
 const UserSchema = new mongoose.Schema<IUser>(
   {
@@ -28,6 +29,21 @@ const UserSchema = new mongoose.Schema<IUser>(
       required: [true, 'Please provide password'],
       minlength: 8,
       maxlenght: 24,
+    },
+    plan: {
+      type: String,
+      enum: ['free', 'premium'],
+      default: 'free',
+    },
+    preferences: {
+      emailReminder: {
+        type: Boolean,
+        default: true,
+      },
+      weeklyDigest: {
+        type: Boolean,
+        default: false,
+      },
     },
     resetPasswordTokenHash: { type: String, select: false },
     resetPasswordExpires: { type: Date, select: false },
