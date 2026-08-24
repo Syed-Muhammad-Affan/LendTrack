@@ -5,6 +5,6 @@ export interface IItemResponse {
   category: string;
   photo?: string;
   isArchived: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

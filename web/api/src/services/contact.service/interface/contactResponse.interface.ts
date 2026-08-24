@@ -4,6 +4,6 @@ export interface IContactResponse {
   email?: string;
   phone?: string;
   notes: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
