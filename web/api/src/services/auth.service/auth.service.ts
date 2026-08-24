@@ -28,6 +28,8 @@ export class AuthService implements IAuthService {
         id: user._id.toString(),
         username: user.name,
         email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       },
       token,
     };
@@ -65,6 +67,8 @@ export class AuthService implements IAuthService {
         id: user._id.toString(),
         username: user.name,
         email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       },
       token,
     };
