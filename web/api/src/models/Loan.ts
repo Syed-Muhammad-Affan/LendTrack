@@ -38,7 +38,6 @@ const LoanSchema = new Schema<ILoan>(
     },
     returnAt: {
       type: Date,
-      required: [true, 'Please provide date of return'],
     },
   },
   { timestamps: true },
