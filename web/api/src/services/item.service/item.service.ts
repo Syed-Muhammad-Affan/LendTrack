@@ -22,6 +22,8 @@ export class ItemService implements IItemService {
       description: item.description,
       category: item.category,
       isArchived: item.isArchived,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
     };
 
     if (item.photo !== undefined) {
@@ -51,6 +53,8 @@ export class ItemService implements IItemService {
       description: item.description,
       category: item.category,
       isArchived: item.isArchived,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
       ...(item.photo !== undefined && { photo: item.photo }),
     }));
   }
@@ -68,6 +72,8 @@ export class ItemService implements IItemService {
       description: item.description,
       category: item.category,
       isArchived: item.isArchived,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
     };
 
     if (item.photo !== undefined) {
@@ -94,6 +100,8 @@ export class ItemService implements IItemService {
       description: item.description,
       category: item.category,
       isArchived: item.isArchived,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
     };
 
     if (item.photo !== undefined) {
@@ -116,6 +124,8 @@ export class ItemService implements IItemService {
       description: item.description,
       category: item.category,
       isArchived: item.isArchived,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
     };
 
     if (item.photo !== undefined) {
