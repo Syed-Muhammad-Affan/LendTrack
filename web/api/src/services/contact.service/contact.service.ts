@@ -20,6 +20,8 @@ export class ContactService implements IContactService {
       id: contact._id.toString(),
       name: contact.name,
       notes: contact.notes,
+      createdAt: contact.createdAt,
+      updatedAt: contact.updatedAt,
     };
 
     if (contact.email !== undefined) {
@@ -40,6 +42,8 @@ export class ContactService implements IContactService {
       id: contact._id.toString(),
       name: contact.name,
       notes: contact.notes,
+      createdAt: contact.createdAt,
+      updatedAt: contact.updatedAt,
       ...(contact.email !== undefined && {
         email: contact.email,
       }),
@@ -66,6 +70,8 @@ export class ContactService implements IContactService {
       id: contact._id.toString(),
       name: contact.name,
       notes: contact.notes,
+      createdAt: contact.createdAt,
+      updatedAt: contact.updatedAt,
     };
 
     if (contact.email !== undefined) {
@@ -98,6 +104,8 @@ export class ContactService implements IContactService {
       id: contact._id.toString(),
       name: contact.name,
       notes: contact.notes,
+      createdAt: contact.createdAt,
+      updatedAt: contact.updatedAt,
     };
 
     if (contact.email !== undefined) {
@@ -128,6 +136,8 @@ export class ContactService implements IContactService {
       id: contact._id.toString(),
       name: contact.name,
       notes: contact.notes,
+      createdAt: contact.createdAt,
+      updatedAt: contact.updatedAt,
     };
 
     if (contact.email !== undefined) {
