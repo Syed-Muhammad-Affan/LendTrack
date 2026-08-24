@@ -47,6 +47,7 @@ const UserSchema = new mongoose.Schema<IUser>(
     },
     resetPasswordTokenHash: { type: String, select: false },
     resetPasswordExpires: { type: Date, select: false },
+    premiumExpiresAt: { type: Date },
   },
   { timestamps: true },
 );

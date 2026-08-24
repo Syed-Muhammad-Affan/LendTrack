@@ -10,6 +10,7 @@ export interface IUser extends Document {
   resetPasswordExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
+  premiumExpiresAt: Date;
 
   createJWT(): string;
   comparePassword(candidatePassword: string): Promise<boolean>;
