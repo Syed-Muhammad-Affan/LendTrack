@@ -2,7 +2,6 @@ import { Types } from 'mongoose';
 import { IContact } from '../../interface/contact.interface.js';
 import { IContactService } from './interface/contact.service.interface.js';
 import { IContactRepository } from '../../repository/interface/contact.repository.interface.js';
-import { IContactResponse } from './interface/contactResponse.interface.js';
 import errors from '../../errors/index.js';
 
 export class ContactService implements IContactService {
@@ -11,52 +10,21 @@ export class ContactService implements IContactService {
   async createContact(
     data: Partial<IContact>,
     userId: string,
-  ): Promise<IContactResponse> {
+  ): Promise<IContact> {
     data.userId = new Types.ObjectId(userId);
 
     const contact = await this.ContactRepository.createContact(data);
 
-    const response: IContactResponse = {
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-    };
-
-    if (contact.email !== undefined) {
-      response.email = contact.email;
-    }
-
-    if (contact.phone !== undefined) {
-      response.phone = contact.phone;
-    }
-
-    return response;
+    return contact;
   }
 
-  async getAllContact(userId: string): Promise<IContactResponse[]> {
+  async getAllContact(userId: string): Promise<IContact[]> {
     const contacts = await this.ContactRepository.getAllContact(userId);
 
-    return contacts?.map((contact) => ({
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-      ...(contact.email !== undefined && {
-        email: contact.email,
-      }),
-      ...(contact.phone !== undefined && {
-        phone: contact.phone,
-      }),
-    }));
+    return contacts;
   }
 
-  async getSingleContact(
-    contactId: string,
-    userId: string,
-  ): Promise<IContactResponse | null> {
+  async getSingleContact(contactId: string, userId: string): Promise<IContact> {
     const contact = await this.ContactRepository.getSingleContact(
       contactId,
       userId,
@@ -66,30 +34,14 @@ export class ContactService implements IContactService {
       throw new errors.NotFound('Contact not found');
     }
 
-    const response: IContactResponse = {
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-    };
-
-    if (contact.email !== undefined) {
-      response.email = contact.email;
-    }
-
-    if (contact.phone !== undefined) {
-      response.phone = contact.phone;
-    }
-
-    return response;
+    return contact;
   }
 
   async updateContact(
     contactId: string,
     userId: string,
     body: Partial<IContact>,
-  ): Promise<IContactResponse> {
+  ): Promise<IContact> {
     const contact = await this.ContactRepository.updateContact(
       contactId,
       userId,
@@ -100,29 +52,10 @@ export class ContactService implements IContactService {
       throw new errors.NotFound('Contact not found');
     }
 
-    const response: IContactResponse = {
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-    };
-
-    if (contact.email !== undefined) {
-      response.email = contact.email;
-    }
-
-    if (contact.phone !== undefined) {
-      response.phone = contact.phone;
-    }
-
-    return response;
+    return contact;
   }
 
-  async deleteContact(
-    contactId: string,
-    userId: string,
-  ): Promise<IContactResponse> {
+  async deleteContact(contactId: string, userId: string): Promise<IContact> {
     const contact = await this.ContactRepository.deleteContact(
       contactId,
       userId,
@@ -132,22 +65,6 @@ export class ContactService implements IContactService {
       throw new errors.Unauthenticated('Contact not found');
     }
 
-    const response: IContactResponse = {
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-    };
-
-    if (contact.email !== undefined) {
-      response.email = contact.email;
-    }
-
-    if (contact.phone !== undefined) {
-      response.phone = contact.phone;
-    }
-
-    return response;
+    return contact;
   }
 }

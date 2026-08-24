@@ -1,42 +1,21 @@
 import { Types } from 'mongoose';
 import { IItem } from '../../interface/item.interface.js';
 import { IItemService } from './interface/item.service.interface.js';
-import { IItemResponse } from './interface/itemResponse.interface.js';
 import { IItemRepository } from '../../repository/interface/item.repository.interface.js';
 import errors from '../../errors/index.js';
 
 export class ItemService implements IItemService {
   constructor(private readonly ItemRepository: IItemRepository) {}
 
-  async createItem(
-    data: Partial<IItem>,
-    userId: string,
-  ): Promise<IItemResponse> {
+  async createItem(data: Partial<IItem>, userId: string): Promise<IItem> {
     data.userId = new Types.ObjectId(userId);
 
     const item = await this.ItemRepository.createItem(data);
 
-    const response: IItemResponse = {
-      id: item._id.toString(),
-      name: item.name,
-      description: item.description,
-      category: item.category,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-
-    if (item.photo !== undefined) {
-      response.photo = item.photo;
-    }
-
-    return response;
+    return item;
   }
 
-  async getAllItem(
-    userId: string,
-    isArchived?: boolean,
-  ): Promise<IItemResponse[]> {
+  async getAllItem(userId: string, isArchived?: boolean): Promise<IItem[]> {
     const filter: any = { userId };
 
     if (isArchived === undefined) {
@@ -47,91 +26,40 @@ export class ItemService implements IItemService {
 
     const items = await this.ItemRepository.getAllItem(filter);
 
-    return items?.map((item) => ({
-      id: item._id.toString(),
-      name: item.name,
-      description: item.description,
-      category: item.category,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-      ...(item.photo !== undefined && { photo: item.photo }),
-    }));
+    return items;
   }
 
-  async getSingleItem(itemId: string, userId: string): Promise<IItemResponse> {
+  async getSingleItem(itemId: string, userId: string): Promise<IItem> {
     const item = await this.ItemRepository.getSingleItem(itemId, userId);
 
     if (!item) {
       throw new errors.NotFound('Item not found');
     }
 
-    const response: IItemResponse = {
-      id: item._id.toString(),
-      name: item.name,
-      description: item.description,
-      category: item.category,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-
-    if (item.photo !== undefined) {
-      response.photo = item.photo;
-    }
-
-    return response;
+    return item;
   }
 
   async updateItem(
     itemId: string,
     userId: string,
     body: Partial<IItem>,
-  ): Promise<IItemResponse> {
+  ): Promise<IItem> {
     const item = await this.ItemRepository.updateItem(itemId, userId, body);
 
     if (!item) {
       throw new errors.NotFound('Item not found');
     }
 
-    const response: IItemResponse = {
-      id: item._id.toString(),
-      name: item.name,
-      description: item.description,
-      category: item.category,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-
-    if (item.photo !== undefined) {
-      response.photo = item.photo;
-    }
-
-    return response;
+    return item;
   }
 
-  async deleteItem(itemId: string, userId: string): Promise<IItemResponse> {
+  async deleteItem(itemId: string, userId: string): Promise<IItem> {
     const item = await this.ItemRepository.deleteItem(itemId, userId);
 
     if (!item) {
       throw new errors.NotFound('Item not found');
     }
 
-    const response: IItemResponse = {
-      id: item._id.toString(),
-      name: item.name,
-      description: item.description,
-      category: item.category,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-
-    if (item.photo !== undefined) {
-      response.photo = item.photo;
-    }
-
-    return response;
+    return item;
   }
 }
