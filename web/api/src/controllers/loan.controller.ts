@@ -36,7 +36,7 @@ export class LoanController implements ILoanController {
 
     return res.status(StatusCodes.OK).json({
       success: true,
-      message: 'All loan obtained',
+      message: 'All loans obtained',
       data: loans,
     });
   }
@@ -154,7 +154,7 @@ export class LoanController implements ILoanController {
 
     return res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Loan created',
+      message: 'Loan summary obtained',
       data: data,
     });
   }
