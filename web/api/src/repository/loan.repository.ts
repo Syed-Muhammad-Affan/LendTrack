@@ -17,10 +17,7 @@ export class LoanRepository implements ILoanRepository {
     });
   }
 
-  async getAllLoan(
-    userId: string,
-    filter: ILoanFilters,
-  ): Promise<ILoan[] | null> {
+  async getAllLoan(userId: string, filter: ILoanFilters): Promise<ILoan[]> {
     const query: Record<string, unknown> = {
       userId: new Types.ObjectId(userId),
     };
