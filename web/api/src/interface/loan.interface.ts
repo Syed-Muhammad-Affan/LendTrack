@@ -8,7 +8,7 @@ export interface ILoan extends Document {
   status: 'active' | 'returned' | 'overdue' | 'lost';
   loanedAt: Date;
   expectedReturnAt: Date;
-  returnAt?: Date | null;
+  returnedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
