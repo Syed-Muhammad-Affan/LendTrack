@@ -5,6 +5,12 @@ export interface AuthResponse {
     email: string;
     createdAt: Date;
     updatedAt: Date;
+    plan: string;
+    premiumExpiresAt: Date;
+    preferences: {
+      emailReminder: boolean;
+      weeklyDigest: boolean;
+    };
   };
   token: string;
 }

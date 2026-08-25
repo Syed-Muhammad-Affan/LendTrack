@@ -30,6 +30,12 @@ export class AuthService implements IAuthService {
         email: user.email,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        plan: user.plan,
+        premiumExpiresAt: user.premiumExpiresAt,
+        preferences: {
+          emailReminder: user.preferences.emailReminder,
+          weeklyDigest: user.preferences.weeklyDigest,
+        },
       },
       token,
     };
@@ -69,6 +75,12 @@ export class AuthService implements IAuthService {
         email: user.email,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        plan: user.plan,
+        premiumExpiresAt: user.premiumExpiresAt,
+        preferences: {
+          emailReminder: user.preferences.emailReminder,
+          weeklyDigest: user.preferences.weeklyDigest,
+        },
       },
       token,
     };
