@@ -7,7 +7,8 @@ import { ILoanSummary } from './interface/loan.summary.interface.js';
 
 export class LoanRepository implements ILoanRepository {
   async createLoan(body: Partial<ILoan>): Promise<ILoan> {
-    return await Loan.create(body);
+    const loan = await Loan.create(body);
+    return loan.populate(['itemId', 'contactId']);
   }
 
   async countActiveLoan(userId: string): Promise<number> {
@@ -34,14 +35,16 @@ export class LoanRepository implements ILoanRepository {
       query.direction = filter.direction;
     }
 
-    return await Loan.find(query).populate('userId').populate('contactId');
+    return await Loan.find(query).populate('contactId').populate('itemId');
   }
 
   async getSingleLoan(loanId: string, userId: string): Promise<ILoan | null> {
     return await Loan.findOne({
       _id: new Types.ObjectId(loanId),
       userId: new Types.ObjectId(userId),
-    });
+    })
+      .populate('contactId')
+      .populate('itemId');
   }
 
   async deleteLoan(loanId: string, userId: string): Promise<ILoan | null> {
@@ -63,7 +66,9 @@ export class LoanRepository implements ILoanRepository {
         runValidators: true,
         returnDocument: 'after',
       },
-    );
+    )
+      .populate('contactId')
+      .populate('itemId');
   }
 
   //   async getLoanSummary(userId: string): Promise<ILoanSummary | null> {
