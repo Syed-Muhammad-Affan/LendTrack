@@ -25,7 +25,7 @@ export const updateLoanSchema = z
     status: z.enum(['active', 'returned', 'overdue', 'lost']).optional(),
     loanedAt: z.coerce.date().optional(),
     expectedReturnAt: z.coerce.date().optional(),
-    returnAt: z.coerce.date().optional(),
+    returnedAt: z.coerce.date().optional(),
   })
   .refine(
     (data) =>
@@ -35,7 +35,7 @@ export const updateLoanSchema = z
       data.status !== undefined ||
       data.loanedAt !== undefined ||
       data.expectedReturnAt !== undefined ||
-      data.returnAt !== undefined,
+      data.returnedAt !== undefined,
     { message: 'At least one field is required to update' },
   )
   .refine(
