@@ -11,4 +11,5 @@ export interface IItemRepository {
     body: Partial<IItem>,
   ): Promise<IItem | null>;
   deleteItem(itemId: string, userId: string): Promise<IItem | null>;
+  itemExists(itemId: string, userId: string): Promise<boolean>;
 }

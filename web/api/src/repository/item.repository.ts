@@ -30,4 +30,9 @@ export class ItemRepository implements IItemRepository {
   async deleteItem(itemId: string, userId: string): Promise<IItem | null> {
     return await Item.findOneAndDelete({ _id: itemId, userId: userId });
   }
+
+  async itemExists(itemId: string, userId: string): Promise<boolean> {
+    const result = await Item.exists({ _id: itemId, userId });
+    return result !== null;
+  }
 }
