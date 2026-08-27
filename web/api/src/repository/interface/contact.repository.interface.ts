@@ -11,4 +11,5 @@ export interface IContactRepository {
     body: Partial<IContact>,
   ): Promise<IContact | null>;
   deleteContact(contactTd: string, userId: string): Promise<IContact | null>;
+  contactExists(contactId: string, userId: string): Promise<Boolean>;
 }

@@ -36,4 +36,9 @@ export class ContactRepository implements IContactRepository {
   ): Promise<IContact | null> {
     return await Contact.findOneAndDelete({ _id: contactTd, userId: userId });
   }
+
+  async contactExists(contactId: string, userId: string): Promise<Boolean> {
+    const result = await Contact.exists({ _id: contactId, userId });
+    return result !== null;
+  }
 }
