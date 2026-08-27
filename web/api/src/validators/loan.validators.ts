@@ -8,10 +8,10 @@ export const createLoanSchema = z
     direction: z.enum(['lent_out', 'borrowed'], {
       error: 'Direction must be lent_out or borrowed',
     }),
-    loanedAt: z.coerce.date(),
+    loanedAt: z.coerce.date().default(() => new Date()),
     expectedReturnAt: z.coerce.date(),
   })
-  .refine((data) => data.expectedReturnAt > data.loanedAt, {
+  .refine((data) => !data.loanedAt || data.expectedReturnAt > data.loanedAt, {
     message: 'Must be after loaned_at',
     path: ['expectedReturnAt'],
   });
