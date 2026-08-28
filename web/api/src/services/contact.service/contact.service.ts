@@ -6,16 +6,7 @@ import errors from '../../errors/index.js';
 import { IContactResponse } from './interface/contactResponse.interface.js';
 
 export class ContactService implements IContactService {
-  constructor(private readonly ContactRepository: IContactRepository) {}
-
-  async createContact(
-    data: Partial<IContact>,
-    userId: string,
-  ): Promise<IContactResponse> {
-    data.userId = new Types.ObjectId(userId);
-
-    const contact = await this.ContactRepository.createContact(data);
-
+  private toContactResponse(contact: IContact): IContactResponse {
     const response: IContactResponse = {
       id: contact._id.toString(),
       name: contact.name,
@@ -35,28 +26,23 @@ export class ContactService implements IContactService {
     return response;
   }
 
+  constructor(private readonly ContactRepository: IContactRepository) {}
+
+  async createContact(
+    data: Partial<IContact>,
+    userId: string,
+  ): Promise<IContactResponse> {
+    data.userId = new Types.ObjectId(userId);
+
+    const contact = await this.ContactRepository.createContact(data);
+
+    return this.toContactResponse(contact);
+  }
+
   async getAllContact(userId: string): Promise<IContactResponse[]> {
     const contacts = await this.ContactRepository.getAllContact(userId);
 
-    return contacts.map((contact) => {
-      const response: IContactResponse = {
-        id: contact._id.toString(),
-        name: contact.name,
-        notes: contact.notes,
-        createdAt: contact.createdAt,
-        updatedAt: contact.updatedAt,
-      };
-
-      if (contact.email) {
-        response.email = contact.email;
-      }
-
-      if (contact.phone) {
-        response.phone = contact.phone;
-      }
-
-      return response;
-    });
+    return contacts.map((contact) => this.toContactResponse(contact));
   }
 
   async getSingleContact(
@@ -72,23 +58,7 @@ export class ContactService implements IContactService {
       throw new errors.NotFound('Contact not found');
     }
 
-    const response: IContactResponse = {
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-    };
-
-    if (contact.email) {
-      response.email = contact.email;
-    }
-
-    if (contact.phone) {
-      response.phone = contact.phone;
-    }
-
-    return response;
+    return this.toContactResponse(contact);
   }
 
   async updateContact(
@@ -106,23 +76,7 @@ export class ContactService implements IContactService {
       throw new errors.NotFound('Contact not found');
     }
 
-    const response: IContactResponse = {
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-    };
-
-    if (contact.email) {
-      response.email = contact.email;
-    }
-
-    if (contact.phone) {
-      response.phone = contact.phone;
-    }
-
-    return response;
+    return this.toContactResponse(contact);
   }
 
   async deleteContact(
@@ -138,22 +92,6 @@ export class ContactService implements IContactService {
       throw new errors.Unauthenticated('Contact not found');
     }
 
-    const response: IContactResponse = {
-      id: contact._id.toString(),
-      name: contact.name,
-      notes: contact.notes,
-      createdAt: contact.createdAt,
-      updatedAt: contact.updatedAt,
-    };
-
-    if (contact.email) {
-      response.email = contact.email;
-    }
-
-    if (contact.phone) {
-      response.phone = contact.phone;
-    }
-
-    return response;
+    return this.toContactResponse(contact);
   }
 }
