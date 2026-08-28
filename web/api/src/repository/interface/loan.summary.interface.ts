@@ -1,4 +1,4 @@
-import { ILoan } from '../../interface/loan.interface.js';
+import { ILoanPopulated } from '../../interface/loan.populated.interface.js';
 
 export interface ILoanSummary {
   total: number;
@@ -9,5 +9,5 @@ export interface ILoanSummary {
   lentOut: number;
   borrowed: number;
   upcomingDueCount: number;
-  upcomingDueItems: ILoan[];
+  upcomingDueItems: ILoanPopulated[];
 }

@@ -4,11 +4,12 @@ import Loan from '../models/Loan.js';
 import { ILoanFilters } from './interface/loan.filter.interface.js';
 import { ILoanRepository } from './interface/loan.repository.interface.js';
 import { ILoanSummary } from './interface/loan.summary.interface.js';
+import { ILoanPopulated } from '../interface/loan.populated.interface.js';
 
 export class LoanRepository implements ILoanRepository {
-  async createLoan(body: Partial<ILoan>): Promise<ILoan> {
+  async createLoan(body: Partial<ILoan>): Promise<ILoanPopulated> {
     const loan = await Loan.create(body);
-    return loan.populate(['itemId', 'contactId']);
+    return loan.populate(['itemId', 'contactId']) as unknown as ILoanPopulated;
   }
 
   async countActiveLoan(userId: string): Promise<number> {
@@ -18,7 +19,10 @@ export class LoanRepository implements ILoanRepository {
     });
   }
 
-  async getAllLoan(userId: string, filter: ILoanFilters): Promise<ILoan[]> {
+  async getAllLoan(
+    userId: string,
+    filter: ILoanFilters,
+  ): Promise<ILoanPopulated[]> {
     const query: Record<string, unknown> = {
       userId: new Types.ObjectId(userId),
     };
@@ -35,16 +39,21 @@ export class LoanRepository implements ILoanRepository {
       query.direction = filter.direction;
     }
 
-    return await Loan.find(query).populate('contactId').populate('itemId');
+    return (await Loan.find(query)
+      .populate('contactId')
+      .populate('itemId')) as unknown as ILoanPopulated[];
   }
 
-  async getSingleLoan(loanId: string, userId: string): Promise<ILoan | null> {
-    return await Loan.findOne({
+  async getSingleLoan(
+    loanId: string,
+    userId: string,
+  ): Promise<ILoanPopulated | null> {
+    return (await Loan.findOne({
       _id: new Types.ObjectId(loanId),
       userId: new Types.ObjectId(userId),
     })
       .populate('contactId')
-      .populate('itemId');
+      .populate('itemId')) as unknown as ILoanPopulated;
   }
 
   async deleteLoan(loanId: string, userId: string): Promise<ILoan | null> {
@@ -58,8 +67,8 @@ export class LoanRepository implements ILoanRepository {
     loanId: string,
     userId: string,
     body: Partial<ILoan>,
-  ): Promise<ILoan | null> {
-    return await Loan.findOneAndUpdate(
+  ): Promise<ILoanPopulated | null> {
+    return (await Loan.findOneAndUpdate(
       { _id: new Types.ObjectId(loanId), userId: new Types.ObjectId(userId) },
       body,
       {
@@ -68,7 +77,7 @@ export class LoanRepository implements ILoanRepository {
       },
     )
       .populate('contactId')
-      .populate('itemId');
+      .populate('itemId')) as unknown as ILoanPopulated;
   }
 
   //   async getLoanSummary(userId: string): Promise<ILoanSummary | null> {
@@ -183,5 +192,15 @@ export class LoanRepository implements ILoanRepository {
       upcomingDueCount: upcomingDue.length,
       upcomingDueItems: upcomingDue,
     };
+  }
+
+  async itemHasActiveLoan(itemId: string, userId: string): Promise<Boolean> {
+    const result = await Loan.exists({
+      itemId,
+      userId,
+      status: { $in: ['active', 'overdue'] },
+    });
+
+    return result !== null;
   }
 }
