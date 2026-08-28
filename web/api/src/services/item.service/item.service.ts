@@ -6,16 +6,7 @@ import errors from '../../errors/index.js';
 import { IItemResponse } from './interface/itemResponse.interface.js';
 
 export class ItemService implements IItemService {
-  constructor(private readonly ItemRepository: IItemRepository) {}
-
-  async createItem(
-    data: Partial<IItem>,
-    userId: string,
-  ): Promise<IItemResponse> {
-    data.userId = new Types.ObjectId(userId);
-
-    const item = await this.ItemRepository.createItem(data);
-
+  private toItemResponse(item: IItem): IItemResponse {
     const response: IItemResponse = {
       id: item._id.toString(),
       name: item.name,
@@ -31,6 +22,19 @@ export class ItemService implements IItemService {
     }
 
     return response;
+  }
+
+  constructor(private readonly ItemRepository: IItemRepository) {}
+
+  async createItem(
+    data: Partial<IItem>,
+    userId: string,
+  ): Promise<IItemResponse> {
+    data.userId = new Types.ObjectId(userId);
+
+    const item = await this.ItemRepository.createItem(data);
+
+    return this.toItemResponse(item);
   }
 
   async getAllItem(
@@ -47,23 +51,7 @@ export class ItemService implements IItemService {
 
     const items = await this.ItemRepository.getAllItem(filter);
 
-    return items.map((item) => {
-      const response: IItemResponse = {
-        id: item._id.toString(),
-        name: item.name,
-        category: item.category,
-        description: item.description,
-        isArchived: item.isArchived,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-      };
-
-      if (item.photo) {
-        response.photo = item.photo;
-      }
-
-      return response;
-    });
+    return items.map((item) => this.toItemResponse(item));
   }
 
   async getSingleItem(itemId: string, userId: string): Promise<IItemResponse> {
@@ -73,21 +61,7 @@ export class ItemService implements IItemService {
       throw new errors.NotFound('Item not found');
     }
 
-    const response: IItemResponse = {
-      id: item._id.toString(),
-      name: item.name,
-      category: item.category,
-      description: item.description,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-
-    if (item.photo) {
-      response.photo = item.photo;
-    }
-
-    return response;
+    return this.toItemResponse(item);
   }
 
   async updateItem(
@@ -101,21 +75,7 @@ export class ItemService implements IItemService {
       throw new errors.NotFound('Item not found');
     }
 
-    const response: IItemResponse = {
-      id: item._id.toString(),
-      name: item.name,
-      category: item.category,
-      description: item.description,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-
-    if (item.photo) {
-      response.photo = item.photo;
-    }
-
-    return response;
+    return this.toItemResponse(item);
   }
 
   async deleteItem(itemId: string, userId: string): Promise<IItemResponse> {
@@ -125,20 +85,6 @@ export class ItemService implements IItemService {
       throw new errors.NotFound('Item not found');
     }
 
-    const response: IItemResponse = {
-      id: item._id.toString(),
-      name: item.name,
-      category: item.category,
-      description: item.description,
-      isArchived: item.isArchived,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    };
-
-    if (item.photo) {
-      response.photo = item.photo;
-    }
-
-    return response;
+    return this.toItemResponse(item);
   }
 }
