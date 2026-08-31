@@ -1,5 +1,5 @@
 import { AuthController } from '../controllers/auth.controller.js';
-import { MailerService } from '../mail/mailer.service.js';
+import { MailerService } from '../services/mail/mailer.service.js';
 import { UserRepository } from '../repository/user.repository.js';
 import { AuthRoute } from '../routes/auth.routes.js';
 import { AuthService } from '../services/auth.service/auth.service.js';

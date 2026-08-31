@@ -1,6 +1,6 @@
 import { config } from '../../config/config.js';
 import errors from '../../errors/index.js';
-import { IMailerService } from '../../mail/interface/mailer.service.interface.js';
+import { IMailerService } from '../mail/interface/mailer.service.interface.js';
 import { IUserRepository } from '../../repository/interface/user.repository.interface.js';
 import { generateResetToken, hashToken } from '../../utils/token.js';
 import { IAuthService } from './interface/auth.service.interface.js';
