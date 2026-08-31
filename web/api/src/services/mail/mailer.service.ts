@@ -39,4 +39,30 @@ export class MailerService implements IMailerService {
       If you didn't request this, ignore this email.</p>`,
     });
   }
+
+  async sendPreDueReminder(
+    to: string,
+    itemName: string,
+    dueDate: Date,
+  ): Promise<void> {
+    await this.transporter.sendMail({
+      from: config.mail.user,
+      to: to,
+      subject: `Reminder: "${itemName}" is due back soon`,
+      text: `Just a reminder that "${itemName}" is due back by ${dueDate.toDateString()}.`,
+    });
+  }
+
+  async sendOverdueReminder(
+    to: string,
+    itemName: string,
+    dueDate: Date,
+  ): Promise<void> {
+    await this.transporter.sendMail({
+      from: config.mail.user,
+      to: to,
+      subject: `Overdue: "${itemName}" was due on ${dueDate.toDateString()}`,
+      text: `"${itemName}" was expected back on ${dueDate.toDateString()} and hasn't been marked returned yet.`,
+    });
+  }
 }
