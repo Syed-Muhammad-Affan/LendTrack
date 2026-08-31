@@ -16,4 +16,5 @@ export interface ILoanRepository {
   deleteLoan(loanId: string, userId: string): Promise<ILoan | null>;
   getLoanSummary(userId: string): Promise<ILoanSummary | null>;
   itemHasActiveLoan(itemId: string, userId: string): Promise<Boolean>;
+  getLoansMatching(query: Record<string, unknown>): Promise<ILoanPopulated[]>;
 }

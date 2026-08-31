@@ -203,4 +203,12 @@ export class LoanRepository implements ILoanRepository {
 
     return result !== null;
   }
+
+  async getLoansMatching(
+    query: Record<string, unknown>,
+  ): Promise<ILoanPopulated[]> {
+    return (await Loan.find(query)
+      .populate('itemId')
+      .populate('contactId')) as unknown as ILoanPopulated[];
+  }
 }
