@@ -3,7 +3,8 @@ import { z } from 'zod';
 // POST /loans — body
 export const createLoanSchema = z
   .object({
-    itemId: z.string().min(1, 'Item is required'),
+    itemId: z.string().min(1).optional(),
+    itemDescription: z.string().trim().min(1).max(100).optional(),
     contactId: z.string().min(1, 'Contact is required'),
     direction: z.enum(['lent_out', 'borrowed'], {
       error: 'Direction must be lent_out or borrowed',
@@ -14,12 +15,21 @@ export const createLoanSchema = z
   .refine((data) => !data.loanedAt || data.expectedReturnAt > data.loanedAt, {
     message: 'Must be after loaned_at',
     path: ['expectedReturnAt'],
+  })
+  .refine((data) => data.direction !== 'lent_out' || !!data.itemId, {
+    message: 'itemId is required when direction is lent_out',
+    path: ['itemId'],
+  })
+  .refine((data) => data.direction !== 'borrowed' || !!data.itemDescription, {
+    message: 'item description is required when direction is borrowed',
+    path: ['itemId'],
   });
 
 // PATCH /loans/:id — body
 export const updateLoanSchema = z
   .object({
     itemId: z.string().min(1).optional(),
+    itemDescription: z.string().trim().min(1).max(100).optional(),
     contactId: z.string().min(1).optional(),
     direction: z.enum(['lent_out', 'borrowed']).optional(),
     status: z.enum(['active', 'returned', 'overdue', 'lost']).optional(),
