@@ -117,7 +117,7 @@ export class LoanService implements ILoanService {
         throw new errors.BadRequest('Please required itemId');
       }
 
-      const itemOwned = await this.ContactRepository.contactExists(
+      const itemOwned = await this.ItemRepository.itemExists(
         data.contactId.toString(),
         userId,
       );
