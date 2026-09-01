@@ -2,7 +2,8 @@ import { Document, Types } from 'mongoose';
 
 export interface ILoan extends Document {
   userId: Types.ObjectId;
-  itemId: Types.ObjectId;
+  itemId?: Types.ObjectId;
+  itemDescription?: string;
   contactId: Types.ObjectId;
   direction: 'lent_out' | 'borrowed';
   status: 'active' | 'returned' | 'overdue' | 'lost';

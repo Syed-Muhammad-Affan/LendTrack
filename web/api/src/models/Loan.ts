@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { ILoan } from '../interface/loan.interface.js';
+import errors from '../errors/index.js';
 
 const LoanSchema = new Schema<ILoan>(
   {
@@ -16,7 +17,10 @@ const LoanSchema = new Schema<ILoan>(
     itemId: {
       type: Schema.Types.ObjectId,
       ref: 'Item',
-      required: [true, 'Please provide item'],
+    },
+    itemDescription: {
+      type: String,
+      trim: true,
     },
     direction: {
       type: String,
@@ -42,5 +46,19 @@ const LoanSchema = new Schema<ILoan>(
   },
   { timestamps: true },
 );
+
+LoanSchema.pre('validate', function () {
+  if (this.direction === 'lent_out' && !this.itemId) {
+    throw new errors.BadRequest(
+      'itemId is required when direction is lent_out',
+    );
+  }
+
+  if (this.direction === 'borrowed' && !this.itemDescription) {
+    throw new errors.BadRequest(
+      'itemDescription is required when direction is borrowed',
+    );
+  }
+});
 
 export default mongoose.model<ILoan>('Loan', LoanSchema);
