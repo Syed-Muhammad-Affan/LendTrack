@@ -3,6 +3,6 @@ import { IItem } from './item.interface.js';
 import { IContact } from './contact.interface.js';
 
 export interface ILoanPopulated extends Omit<ILoan, 'itemId' | 'contactId'> {
-  itemId: IItem;
+  itemId?: IItem;
   contactId: IContact;
 }
