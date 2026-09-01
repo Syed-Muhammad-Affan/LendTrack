@@ -1,12 +1,14 @@
 import { ILoanPopulated } from '../../interface/loan.populated.interface.js';
 import { LoanRepository } from '../../repository/loan.repository.js';
 import { ReminderLogRepository } from '../../repository/reminderLog.repository.js';
+import { UserRepository } from '../../repository/user.repository.js';
 import { MailerService } from '../mail/mailer.service.js';
 import cron from 'node-cron';
 
 const loanRepository = new LoanRepository();
 const reminderLogRepository = new ReminderLogRepository();
 const mailerService = new MailerService();
+const userRepository = new UserRepository();
 
 async function runReminderCheck(): Promise<void> {
   const now = new Date();
@@ -42,20 +44,33 @@ async function processReminderLoan(
   );
   if (alreadySent) return;
 
-  const recipientEmail = loan.contactId.email;
+  const itemLabel = loan.itemId?.name ?? loan.itemDescription ?? 'an item';
+
+  let recipientEmail: string | undefined;
+
+  if (loan.direction === 'lent_out') {
+    // I lent my item to them — they need the reminder
+    recipientEmail = loan.contactId.email;
+  } else {
+    // I borrowed their item — I need the reminder, not them
+    const owner = await userRepository.getSingleUserById(
+      loan.userId.toString(),
+    );
+    recipientEmail = owner?.email;
+  }
   if (!recipientEmail) return;
 
   try {
     if (type === 'pre_due') {
       await mailerService.sendPreDueReminder(
         recipientEmail,
-        loan.itemId.name,
+        itemLabel,
         loan.expectedReturnAt,
       );
     } else {
       await mailerService.sendOverdueReminder(
         recipientEmail,
-        loan.itemId.name,
+        itemLabel,
         loan.expectedReturnAt,
       );
     }
@@ -83,7 +98,7 @@ async function processReminderLoan(
 
 export function startReminderScheduler(): void {
   cron.schedule(
-    '31 17 * * *',
+    '12 14 * * *',
     () => {
       runReminderCheck().catch((err) =>
         console.error('Reminder scheduler failed:', err),
