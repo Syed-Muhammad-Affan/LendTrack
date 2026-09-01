@@ -16,30 +16,37 @@ import {
 import { ILoanPopulated } from '../../interface/loan.populated.interface.js';
 import { IItemRepository } from '../../repository/interface/item.repository.interface.js';
 import { IContactRepository } from '../../repository/interface/contact.repository.interface.js';
+import { IItem } from '../../interface/item.interface.js';
+import { IContact } from '../../interface/contact.interface.js';
 
 export class LoanService implements ILoanService {
-  private toLoanResponse(loan: ILoanPopulated): ILoanResponse {
-    const item: ILoanItemSummary = {
-      id: loan.itemId._id.toString(),
-      name: loan.itemId.name,
-      ...(loan.itemId.photo ? { photo: loan.itemId.photo } : {}),
+  private buildItemSummary(item: IItem): ILoanItemSummary {
+    return {
+      id: item._id.toString(),
+      name: item.name,
+      ...(item.photo ? { photo: item.photo } : {}),
+    };
+  }
+
+  private buildContactSummary(contact: IContact): ILoanContactSummary {
+    const summary: ILoanContactSummary = {
+      id: contact._id.toString(),
+      name: contact.name,
     };
 
-    const contact: ILoanContactSummary = {
-      id: loan.contactId._id.toString(),
-      name: loan.contactId.name,
-    };
-
-    if (loan.contactId.email) {
-      contact.email = loan.contactId.email;
-    } else if (loan.contactId.phone) {
-      contact.phone = loan.contactId.phone;
+    if (contact.email) {
+      summary.email = contact.email;
+    } else if (contact.phone) {
+      summary.phone = contact.phone;
     }
 
+    return summary;
+  }
+
+  private toLoanResponse(loan: ILoanPopulated): ILoanResponse {
     const response: ILoanResponse = {
       id: loan._id.toString(),
-      item,
-      contact,
+      contact: this.buildContactSummary(loan.contactId),
       direction: loan.direction,
       status: loan.status,
       loanedAt: loan.loanedAt,
@@ -52,33 +59,33 @@ export class LoanService implements ILoanService {
       response.returnedAt = loan.returnedAt;
     }
 
+    if (loan.itemId) {
+      response.item = this.buildItemSummary(loan.itemId);
+    }
+
+    if (loan.itemDescription) {
+      response.itemDescription = loan.itemDescription;
+    }
+
     return response;
   }
 
   private toUpcomingDueSummary(loan: ILoanPopulated): IUpcomingDueLoan {
-    const item: ILoanItemSummary = {
-      id: loan.itemId._id.toString(),
-      name: loan.itemId.name,
-      ...(loan.itemId.photo ? { photo: loan.itemId.photo } : {}),
-    };
-
-    const contact: ILoanContactSummary = {
-      id: loan.contactId._id.toString(),
-      name: loan.contactId.name,
-    };
-
-    if (loan.contactId.email) {
-      contact.email = loan.contactId.email;
-    } else if (loan.contactId.phone) {
-      contact.phone = loan.contactId.phone;
-    }
-
-    return {
+    const response: IUpcomingDueLoan = {
       id: loan._id.toString(),
-      item,
-      contact,
+      contact: this.buildContactSummary(loan.contactId),
       expectedReturnAt: loan.expectedReturnAt,
     };
+
+    if (loan.itemId) {
+      response.item = this.buildItemSummary(loan.itemId);
+    }
+
+    if (loan.itemDescription) {
+      response.itemDescription = loan.itemDescription;
+    }
+
+    return response;
   }
 
   constructor(
@@ -93,24 +100,40 @@ export class LoanService implements ILoanService {
   ): Promise<ILoanResponse> {
     data.userId = new Types.ObjectId(userId);
 
-    if (!data.itemId || !data.contactId) {
-      throw new errors.BadRequest('Please required itemId and contactId');
+    if (!data.contactId) {
+      throw new errors.BadRequest('Please required contactId');
     }
 
-    const [item, contact] = await Promise.all([
-      this.ItemRepository.itemExists(data.itemId!.toString(), userId),
-      this.ContactRepository.contactExists(data.contactId!.toString(), userId),
-    ]);
-
-    if (!item) throw new errors.NotFound('Item not Found');
-    if (!contact) throw new errors.NotFound('Contact not Found');
-
-    const hasActiveLoan = await this.LoanRepository.itemHasActiveLoan(
-      data.itemId.toString(),
+    const contactOwned = await this.ContactRepository.contactExists(
+      data.contactId.toString(),
       userId,
     );
-    if (hasActiveLoan) {
-      throw new errors.Forbidden('This item is already part of an active loan');
+    if (!contactOwned) {
+      throw new errors.NotFound('Contact not found');
+    }
+
+    if (data.direction === 'lent_out') {
+      if (!data.itemId) {
+        throw new errors.BadRequest('Please required itemId');
+      }
+
+      const itemOwned = await this.ContactRepository.contactExists(
+        data.contactId.toString(),
+        userId,
+      );
+      if (!itemOwned) {
+        throw new errors.NotFound('item not found');
+      }
+
+      const hasActiveLoan = await this.LoanRepository.itemHasActiveLoan(
+        data.itemId.toString(),
+        userId,
+      );
+      if (hasActiveLoan) {
+        throw new errors.Forbidden(
+          'This item is already part of an active loan',
+        );
+      }
     }
 
     if (!(await isPremium(userId))) {

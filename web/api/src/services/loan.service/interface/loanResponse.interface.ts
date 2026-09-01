@@ -1,6 +1,7 @@
 export interface ILoanResponse {
   id: string;
-  item: ILoanItemSummary;
+  item?: ILoanItemSummary;
+  itemDescription?: string;
   direction: 'lent_out' | 'borrowed';
   status: 'active' | 'returned' | 'overdue' | 'lost';
   loanedAt: Date;
@@ -30,7 +31,8 @@ export interface ILoanDeleteResponse {
 
 export interface IUpcomingDueLoan {
   id: string;
-  item: ILoanItemSummary;
+  item?: ILoanItemSummary;
+  itemDescription?: string;
   contact: ILoanContactSummary;
   expectedReturnAt: Date;
 }
