@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { IReminderLog } from '../../interface/reminderLog.interface.js';
 import { IReminderLogService } from './interface/reminderLog.service.interface.js';
 import { IReminderLogResponse } from './interface/reminderLogResponse.interface.js';
@@ -31,18 +30,14 @@ export class ReminderLogService implements IReminderLogService {
 
   constructor(private readonly ReminderLogRepository: IReminderLogRepository) {}
 
-  async createReminderLog(
-    data: Partial<IReminderLog>,
-  ): Promise<IReminderLogResponse> {
-    const log = await this.ReminderLogRepository.createReminderLog(data);
-
-    return this.toLogResponse(log);
-  }
-
   async getAllReminderLog(
-    filter: IReminderLogFilter,
+    userId: string,
+    filter: Omit<IReminderLogFilter, 'userId'>,
   ): Promise<IReminderLogResponse[]> {
-    const logs = await this.ReminderLogRepository.getAllReminderLog(filter);
+    const logs = await this.ReminderLogRepository.getAllReminderLog(
+      userId,
+      filter,
+    );
 
     return logs.map((log) => this.toLogResponse(log));
   }

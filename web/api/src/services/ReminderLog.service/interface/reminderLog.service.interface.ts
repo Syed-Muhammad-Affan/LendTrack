@@ -3,9 +3,9 @@ import { IReminderLogFilter } from '../../../repository/interface/reminderLogFil
 import { IReminderLogResponse } from './reminderLogResponse.interface.js';
 
 export interface IReminderLogService {
-  createReminderLog(data: Partial<IReminderLog>): Promise<IReminderLogResponse>;
   getAllReminderLog(
-    filter: IReminderLogFilter,
+    userId: string,
+    filter: Omit<IReminderLogFilter, 'userId'>,
   ): Promise<IReminderLogResponse[]>;
   getSingleReminderLog(
     logId: string,
