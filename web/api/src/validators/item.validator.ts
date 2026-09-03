@@ -42,7 +42,7 @@ export const archiveQuerySchema = z.object({
   archive: z.enum(['true', 'false']).optional(),
 });
 
-export type CreateItemInout = z.infer<typeof createItemSchema>;
+export type CreateItemInput = z.infer<typeof createItemSchema>;
 export type UpdateItemInput = z.infer<typeof updateItemSchema>;
 export type ItemIDParamsInput = z.infer<typeof itemIDParamsSchema>;
 export type ArchiveParamsSchema = z.infer<typeof archiveQuerySchema>;

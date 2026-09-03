@@ -36,6 +36,6 @@ export const updateContactSchema = z
     },
   );
 
-export type CreateContactInout = z.infer<typeof createContactSchema>;
+export type CreateContactInput = z.infer<typeof createContactSchema>;
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
 export type ContactParamsInput = z.infer<typeof contactParamsSchema>;
