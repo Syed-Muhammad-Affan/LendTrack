@@ -63,8 +63,8 @@ export class LoanService implements ILoanService {
       response.item = this.buildItemSummary(loan.itemId);
     }
 
-    if (loan.itemDescription) {
-      response.itemDescription = loan.itemDescription;
+    if (loan.borrowedItemName) {
+      response.borrowedItemName = loan.borrowedItemName;
     }
 
     return response;
@@ -81,8 +81,8 @@ export class LoanService implements ILoanService {
       response.item = this.buildItemSummary(loan.itemId);
     }
 
-    if (loan.itemDescription) {
-      response.itemDescription = loan.itemDescription;
+    if (loan.borrowedItemName) {
+      response.itemDescription = loan.borrowedItemName;
     }
 
     return response;

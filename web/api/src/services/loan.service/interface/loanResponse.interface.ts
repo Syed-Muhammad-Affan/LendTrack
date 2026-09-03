@@ -1,7 +1,7 @@
 export interface ILoanResponse {
   id: string;
   item?: ILoanItemSummary;
-  itemDescription?: string;
+  borrowedItemName?: string;
   direction: 'lent_out' | 'borrowed';
   status: 'active' | 'returned' | 'overdue' | 'lost';
   loanedAt: Date;
