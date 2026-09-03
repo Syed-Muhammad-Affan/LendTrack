@@ -18,7 +18,7 @@ const LoanSchema = new Schema<ILoan>(
       type: Schema.Types.ObjectId,
       ref: 'Item',
     },
-    itemDescription: {
+    borrowedItemName: {
       type: String,
       trim: true,
     },
@@ -54,7 +54,7 @@ LoanSchema.pre('validate', function () {
     );
   }
 
-  if (this.direction === 'borrowed' && !this.itemDescription) {
+  if (this.direction === 'borrowed' && !this.borrowedItemName) {
     throw new errors.BadRequest(
       'itemDescription is required when direction is borrowed',
     );
