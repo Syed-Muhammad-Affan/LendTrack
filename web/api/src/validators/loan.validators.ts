@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const createLoanSchema = z
   .object({
     itemId: z.string().min(1).optional(),
-    itemDescription: z.string().trim().min(1).max(100).optional(),
+    borrowedItemName: z.string().trim().min(1).max(100).optional(),
     contactId: z.string().min(1, 'Contact is required'),
     direction: z.enum(['lent_out', 'borrowed'], {
       error: 'Direction must be lent_out or borrowed',
@@ -20,7 +20,7 @@ export const createLoanSchema = z
     message: 'itemId is required when direction is lent_out',
     path: ['itemId'],
   })
-  .refine((data) => data.direction !== 'borrowed' || !!data.itemDescription, {
+  .refine((data) => data.direction !== 'borrowed' || !!data.borrowedItemName, {
     message: 'item description is required when direction is borrowed',
     path: ['itemId'],
   });
@@ -29,7 +29,7 @@ export const createLoanSchema = z
 export const updateLoanSchema = z
   .object({
     itemId: z.string().min(1).optional(),
-    itemDescription: z.string().trim().min(1).max(100).optional(),
+    borrowedItemName: z.string().trim().min(1).max(100).optional(),
     contactId: z.string().min(1).optional(),
     direction: z.enum(['lent_out', 'borrowed']).optional(),
     status: z.enum(['active', 'returned', 'overdue', 'lost']).optional(),
@@ -45,7 +45,8 @@ export const updateLoanSchema = z
       data.status !== undefined ||
       data.loanedAt !== undefined ||
       data.expectedReturnAt !== undefined ||
-      data.returnedAt !== undefined,
+      data.returnedAt !== undefined ||
+      data.borrowedItemName !== undefined,
     { message: 'At least one field is required to update' },
   )
   .refine(
