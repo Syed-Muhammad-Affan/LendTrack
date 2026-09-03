@@ -8,8 +8,11 @@ export class ReminderLogRepository implements IReminderLogRepository {
     return await ReminderLog.create(body);
   }
 
-  async getAllReminderLog(filter: IReminderLogFilter): Promise<IReminderLog[]> {
-    const query: Record<string, unknown> = { userId: filter.userId };
+  async getAllReminderLog(
+    userId: string,
+    filter: Omit<IReminderLogFilter, 'userId'>,
+  ): Promise<IReminderLog[]> {
+    const query: Record<string, unknown> = { userId: userId };
 
     if (filter.type) {
       query.type = filter.type;
