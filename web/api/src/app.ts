@@ -9,6 +9,7 @@ import { createContactModule } from './containers/contact.container.js';
 import { authMiddleware } from './middleware/auth.js';
 import { createItemModule } from './containers/item.container.js';
 import { createLoanModule } from './containers/loan.container.js';
+import { createReminderLogModule } from './containers/reminderLog.container.js';
 
 const errorHandler = new ErrorHandler();
 const notFound = new NotFound();
@@ -19,6 +20,7 @@ const authRoute = createAuthModule();
 const contactRoute = createContactModule();
 const itemRoute = createItemModule();
 const loanRoute = createLoanModule();
+const reminderLogRoute = createReminderLogModule();
 
 app.set('trust proxy', 1);
 app.use(helmet());
@@ -36,6 +38,7 @@ app.use('/api/v1/auth', authRoute.router);
 app.use('/api/v1/contacts', authMiddleware, contactRoute.router);
 app.use('/api/v1/items', authMiddleware, itemRoute.router);
 app.use('/api/v1/loans', authMiddleware, loanRoute.router);
+app.use('/api/v1/reminder-log', authMiddleware, reminderLogRoute.router);
 
 app.use(notFound.handle);
 app.use(errorHandler.handle);
