@@ -44,7 +44,7 @@ async function processReminderLoan(
   );
   if (alreadySent) return;
 
-  const itemLabel = loan.itemId?.name ?? loan.itemDescription ?? 'an item';
+  const itemLabel = loan.itemId?.name ?? loan.borrowedItemName ?? 'an item';
 
   let recipientEmail: string | undefined;
 
@@ -98,7 +98,7 @@ async function processReminderLoan(
 
 export function startReminderScheduler(): void {
   cron.schedule(
-    '12 14 * * *',
+    '7 10 * * *',
     () => {
       runReminderCheck().catch((err) =>
         console.error('Reminder scheduler failed:', err),
