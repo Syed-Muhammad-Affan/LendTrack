@@ -15,4 +15,8 @@ export interface IReminderLogRepository {
     loanId: string,
     type: 'pre_due' | 'overdue' | 'weekly_digest',
   ): Promise<Boolean>;
+  hasReminderBeenSentThisWeek(
+    userId: string,
+    type: 'weekly_digest',
+  ): Promise<boolean>;
 }

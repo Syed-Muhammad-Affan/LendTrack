@@ -52,4 +52,24 @@ export class ReminderLogRepository implements IReminderLogRepository {
 
     return result !== null;
   }
+
+  async hasReminderBeenSentThisWeek(
+    userId: string,
+    type: 'weekly_digest',
+  ): Promise<boolean> {
+    const startOfWeek = new Date();
+    const day = startOfWeek.getDay();
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1); // Monday as week start
+    startOfWeek.setDate(diff);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const result = await ReminderLog.exists({
+      userId,
+      type,
+      status: 'sent',
+      sentAt: { $gte: startOfWeek },
+    });
+
+    return result !== null;
+  }
 }
