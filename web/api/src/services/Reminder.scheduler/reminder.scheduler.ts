@@ -157,6 +157,25 @@ async function sendDigestForUser(user: IUser): Promise<void> {
   }
 }
 
+async function runOverdueStatusCheck(): Promise<void> {
+  const now = new Date();
+  const updatedCount = await loanRepository.markOverdueLoans(now);
+  console.log(`[reminder-scheduler] Marked ${updatedCount} loan(s) as overdue`);
+}
+
+function registerOverdueStatusCheck(): void {
+  cron.schedule(
+    // '0 0 * * *',
+    '*/2 * * * *',
+    () => {
+      runOverdueStatusCheck().catch((err) =>
+        console.error('[reminder-scheduler] Overdue status check failed:', err),
+      );
+    },
+    { timezone: 'Asia/Karachi' },
+  );
+}
+
 function registerDailyCheck(): void {
   cron.schedule(
     '7 10 * * *',
@@ -187,4 +206,5 @@ function registerWeeklyDigest(): void {
 export function startReminderScheduler(): void {
   registerDailyCheck();
   registerWeeklyDigest();
+  registerOverdueStatusCheck();
 }
