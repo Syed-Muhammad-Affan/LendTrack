@@ -211,4 +211,12 @@ export class LoanRepository implements ILoanRepository {
       .populate('itemId')
       .populate('contactId')) as unknown as ILoanPopulated[];
   }
+
+  async markOverdueLoans(now: Date): Promise<number> {
+    const result = await Loan.updateMany(
+      { status: 'active', expectedReturnAt: { $lt: now } },
+      { $set: { status: 'overdue' } },
+    );
+    return result.modifiedCount;
+  }
 }

@@ -17,4 +17,5 @@ export interface ILoanRepository {
   getLoanSummary(userId: string): Promise<ILoanSummary | null>;
   itemHasActiveLoan(itemId: string, userId: string): Promise<Boolean>;
   getLoansMatching(query: Record<string, unknown>): Promise<ILoanPopulated[]>;
+  markOverdueLoans(now: Date): Promise<number>;
 }
