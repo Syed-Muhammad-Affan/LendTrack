@@ -56,4 +56,11 @@ export class UserRepository implements IUserRepository {
   async deleteUser(id: string): Promise<IUser | null> {
     return await User.findByIdAndDelete(id);
   }
+
+  async getPremiumUsersWithDigestEnabled(): Promise<IUser[]> {
+    return await User.find({
+      plan: 'premium',
+      'preferences.weeklyDigest': true,
+    });
+  }
 }

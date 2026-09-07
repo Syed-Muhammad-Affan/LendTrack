@@ -15,4 +15,5 @@ export interface IUserRepository {
     password: string,
   ): Promise<void>;
   deleteUser(id: string): Promise<IUser | null>;
+  getPremiumUsersWithDigestEnabled(): Promise<IUser[]>;
 }
