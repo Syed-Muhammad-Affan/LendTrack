@@ -1,4 +1,5 @@
 import { ILoanPopulated } from '../../interface/loan.populated.interface.js';
+import { IUser } from '../../interface/user.interface.js';
 import { LoanRepository } from '../../repository/loan.repository.js';
 import { ReminderLogRepository } from '../../repository/reminderLog.repository.js';
 import { UserRepository } from '../../repository/user.repository.js';
@@ -96,7 +97,67 @@ async function processReminderLoan(
   }
 }
 
-export function startReminderScheduler(): void {
+async function runWeeklyDigest(): Promise<void> {
+  console.log('[weekly-digest] Running at', new Date().toISOString());
+  const eligibleUsers = await userRepository.getPremiumUsersWithDigestEnabled();
+  console.log('[weekly-digest] Eligible users found:', eligibleUsers.length);
+
+  for (const user of eligibleUsers) {
+    await sendDigestForUser(user);
+  }
+}
+
+async function sendDigestForUser(user: IUser): Promise<void> {
+  console.log(
+    '[weekly-digest] Processing user',
+    user._id.toString(),
+    user.email,
+  );
+
+  const alreadySentThisWeek =
+    await reminderLogRepository.hasReminderBeenSentThisWeek(
+      user._id.toString(),
+      'weekly_digest',
+    );
+  if (alreadySentThisWeek) {
+    console.log('[weekly-digest] Already sent this week, skipping');
+    return;
+  }
+
+  const activeLoans = await loanRepository.getLoansMatching({
+    userId: user._id,
+    status: { $in: ['active', 'overdue'] },
+  });
+  console.log('[weekly-digest] Active loans found:', activeLoans.length);
+
+  if (activeLoans.length === 0) {
+    console.log('[weekly-digest] No active loans, skipping digest');
+    return;
+  }
+
+  try {
+    await mailerService.sendWeeklyDigest(user.email, activeLoans);
+
+    await reminderLogRepository.createReminderLog({
+      userId: user._id,
+      type: 'weekly_digest',
+      status: 'sent',
+      recipientEmail: user.email,
+      sentAt: new Date(),
+    });
+  } catch (err: any) {
+    await reminderLogRepository.createReminderLog({
+      userId: user._id,
+      type: 'weekly_digest',
+      status: 'failed',
+      recipientEmail: user.email,
+      errorMessage: err.message,
+      sentAt: new Date(),
+    });
+  }
+}
+
+function registerDailyCheck(): void {
   cron.schedule(
     '7 10 * * *',
     () => {
@@ -108,4 +169,22 @@ export function startReminderScheduler(): void {
       timezone: 'Asia/Karachi',
     },
   );
+}
+
+function registerWeeklyDigest(): void {
+  cron.schedule(
+    '0 8 * * 1',
+    // '*/2 * * * *',
+    () => {
+      runWeeklyDigest().catch((err) =>
+        console.error('[reminder-scheduler] Weekly digest failed:', err),
+      );
+    },
+    { timezone: 'Asia/Karachi' },
+  );
+}
+
+export function startReminderScheduler(): void {
+  registerDailyCheck();
+  registerWeeklyDigest();
 }
