@@ -1,6 +1,7 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import { IMailerService } from './interface/mailer.service.interface.js';
 import { config } from '../../config/config.js';
+import { ILoanPopulated } from '../../interface/loan.populated.interface.js';
 
 export class MailerService implements IMailerService {
   private readonly transporter: Transporter;
@@ -63,6 +64,22 @@ export class MailerService implements IMailerService {
       to: to,
       subject: `Overdue: "${itemName}" was due on ${dueDate.toDateString()}`,
       text: `"${itemName}" was expected back on ${dueDate.toDateString()} and hasn't been marked returned yet.`,
+    });
+  }
+
+  async sendWeeklyDigest(to: string, loans: ILoanPopulated[]): Promise<void> {
+    const loanLines = loans
+      .map((loan) => {
+        const label = loan.itemId?.name ?? loan.borrowedItemName ?? 'an item';
+        return `- ${label}, due ${loan.expectedReturnAt.toDateString()}`;
+      })
+      .join('\n');
+
+    await this.transporter.sendMail({
+      from: config.mail.user,
+      to,
+      subject: 'Your weekly lending summary',
+      text: `Here's what's currently out or overdue:\n\n${loanLines}`,
     });
   }
 }
