@@ -165,8 +165,8 @@ async function runOverdueStatusCheck(): Promise<void> {
 
 function registerOverdueStatusCheck(): void {
   cron.schedule(
-    // '0 0 * * *',
-    '*/2 * * * *',
+    '0 0 * * *',
+    // '*/2 * * * *',
     () => {
       runOverdueStatusCheck().catch((err) =>
         console.error('[reminder-scheduler] Overdue status check failed:', err),
