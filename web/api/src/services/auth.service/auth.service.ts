@@ -9,6 +9,7 @@ import { IGenericResponse } from './interface/genericResponse.interface.js';
 import { ILoginDTO } from './interface/loginDTO.interface.js';
 import { IRegisterDTO } from './interface/registerDTO.interface.js';
 import bcrypt from 'bcryptjs';
+import { IUser } from '../../interface/user.interface.js';
 
 export class AuthService implements IAuthService {
   constructor(
@@ -16,14 +17,8 @@ export class AuthService implements IAuthService {
     private readonly MailerService: IMailerService,
   ) {}
 
-  async register(data: IRegisterDTO): Promise<AuthResponse> {
-    const user = await this.UserRepository.createUser(data);
-
-    await this.MailerService.sendWelcomeEmail(user.email, user.name);
-
-    const token = user.createJWT();
-
-    return {
+  private toAuthResponse(user: IUser, token: string): AuthResponse {
+    const response: AuthResponse = {
       user: {
         id: user._id.toString(),
         username: user.name,
@@ -39,6 +34,22 @@ export class AuthService implements IAuthService {
       },
       token,
     };
+
+    if (user.avatarUrl) {
+      response.user.avatarUrl = user.avatarUrl;
+    }
+
+    return response;
+  }
+
+  async register(data: IRegisterDTO): Promise<AuthResponse> {
+    const user = await this.UserRepository.createUser(data);
+
+    await this.MailerService.sendWelcomeEmail(user.email, user.name);
+
+    const token = user.createJWT();
+
+    return this.toAuthResponse(user, token);
   }
 
   async login(data: ILoginDTO): Promise<AuthResponse> {
@@ -68,22 +79,7 @@ export class AuthService implements IAuthService {
 
     console.log('NEW TOKEN CREATED FOR:', user._id.toString());
 
-    return {
-      user: {
-        id: user._id.toString(),
-        username: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        plan: user.plan,
-        premiumExpiresAt: user.premiumExpiresAt,
-        preferences: {
-          emailReminder: user.preferences.emailReminder,
-          weeklyDigest: user.preferences.weeklyDigest,
-        },
-      },
-      token,
-    };
+    return this.toAuthResponse(user, token);
   }
 
   async forgotPassword(email: string): Promise<IGenericResponse> {

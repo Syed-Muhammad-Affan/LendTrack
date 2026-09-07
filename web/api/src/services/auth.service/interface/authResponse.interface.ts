@@ -3,9 +3,10 @@ export interface AuthResponse {
     id: string;
     username: string;
     email: string;
+    avatarUrl?: string;
     createdAt: Date;
     updatedAt: Date;
-    plan: string;
+    plan: 'free' | 'premium';
     premiumExpiresAt: Date;
     preferences: {
       emailReminder: boolean;
