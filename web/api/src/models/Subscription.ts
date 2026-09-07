@@ -12,11 +12,7 @@ const SubscriptionSchema = new Schema<ISubscription>({
     enum: ['active', 'canceled', 'past_due'],
     required: [true, 'Please provide status'],
   },
-  stripeCustomerId: {
-    type: String,
-    required: [true, 'Please provide Stripe Customer ID'],
-  },
-  stripeSubscriptionId: {
+  providerSubscriptionId: {
     type: String,
     required: [true, 'Please provide Stripe Subscription ID'],
   },
