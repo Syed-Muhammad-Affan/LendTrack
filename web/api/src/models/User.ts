@@ -30,6 +30,12 @@ const UserSchema = new mongoose.Schema<IUser>(
       minlength: 8,
       maxlenght: 24,
     },
+    avatarUrl: {
+      type: String,
+    },
+    stripeCustomerId: {
+      type: String,
+    },
     plan: {
       type: String,
       enum: ['free', 'premium'],

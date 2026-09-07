@@ -5,6 +5,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   plan: 'free' | 'premium';
+  avatarUrl?: string;
+  stripeCustomerId?: string;
   preferences: { emailReminder: boolean; weeklyDigest: boolean };
   resetPasswordTokenHash?: string;
   resetPasswordExpires?: Date;
