@@ -9,39 +9,27 @@ export class SubscriptionRepository implements ISubscriptionRepository {
     return await Subscription.create(body);
   }
 
-  async getAllSubscription(userId: string): Promise<ISubscription[] | null> {
-    return await Subscription.find({ userId: userId }).sort('createdAt');
+  async getByUserId(userId: string): Promise<ISubscription | null> {
+    return await Subscription.findOne({ userId });
   }
 
-  async getSingleSubscription(
-    subscriptionId: string,
-    userId: string,
+  async getByProviderSubscriptionId(
+    providerSubscriptionId: string,
   ): Promise<ISubscription | null> {
-    return await Subscription.findOne({ _id: subscriptionId, userId: userId });
+    return await Subscription.findOne({ providerSubscriptionId });
   }
 
-  async updateSubscription(
-    subscriptionId: string,
-    userId: string,
+  async updateByProviderSubscriptionId(
+    providerSubscriptionId: string,
     body: Partial<ISubscription>,
   ): Promise<ISubscription | null> {
     return await Subscription.findOneAndUpdate(
-      { _id: subscriptionId, userId: userId },
+      { providerSubscriptionId },
       body,
       {
+        new: true,
         runValidators: true,
-        returnDocument: 'after',
       },
     );
-  }
-
-  async deleteSubscription(
-    subscriptionId: string,
-    userId: string,
-  ): Promise<ISubscription | null> {
-    return await Subscription.findOneAndDelete({
-      _id: subscriptionId,
-      userId: userId,
-    });
   }
 }
