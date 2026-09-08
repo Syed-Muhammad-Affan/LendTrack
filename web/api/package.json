@@ -26,6 +26,7 @@
     "node-cron": "^4.6.0",
     "nodemailer": "^9.0.5",
     "rate-limiter": "^0.2.0",
+    "stripe": "^22.6.1",
     "swagger-ui-express": "^5.0.1",
     "xss-clean": "^0.1.1",
     "yamljs": "^0.3.0",
