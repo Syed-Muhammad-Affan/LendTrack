@@ -16,6 +16,10 @@ const envSchema = z.object({
   APP_URL: z.string(),
 
   RESET_TOKEN_EXPIRY_MINUTES: z.coerce.number().positive().default(15),
+
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_WEBHOOK_SECRET: z.string(),
+  STRIPE_PRICE_ID_PREMIUM: z.string(),
 });
 
 const env = envSchema.parse(process.env);
@@ -47,5 +51,11 @@ export const config = {
 
   resetToken: {
     expiryMinutes: env.RESET_TOKEN_EXPIRY_MINUTES,
+  },
+
+  stripe: {
+    secretKey: env.STRIPE_SECRET_KEY,
+    webhookSecret: env.STRIPE_WEBHOOK_SECRET,
+    priceIdPremium: env.STRIPE_PRICE_ID_PREMIUM,
   },
 };
