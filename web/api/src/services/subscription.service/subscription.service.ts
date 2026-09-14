@@ -36,7 +36,10 @@ export class SubscriptionService implements ISubscriptionService {
       line_items: [{ price: config.stripe.priceIdPremium, quantity: 1 }],
       success_url: `${config.app.url}/settings/billing?success=true`,
       cancel_url: `${config.app.url}/settings/billing?canceled=true`,
-      metadata: { userId },
+      metadata: { userId }, // Metadata on Checkout Session
+      subscription_data: {
+        metadata: { userId }, // Metadata on the actual Subscription object
+      },
     });
 
     if (!session.url) {
