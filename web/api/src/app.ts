@@ -10,6 +10,8 @@ import { authMiddleware } from './middleware/auth.js';
 import { createItemModule } from './containers/item.container.js';
 import { createLoanModule } from './containers/loan.container.js';
 import { createReminderLogModule } from './containers/reminderLog.container.js';
+import { createSubscriptionModule } from './containers/subscription.container.js';
+import { createWebhookModule } from './containers/webhook.container.js';
 
 const errorHandler = new ErrorHandler();
 const notFound = new NotFound();
@@ -21,10 +23,19 @@ const contactRoute = createContactModule();
 const itemRoute = createItemModule();
 const loanRoute = createLoanModule();
 const reminderLogRoute = createReminderLogModule();
+const subscriptionRoute = createSubscriptionModule();
+const webhookRoute = createWebhookModule();
 
 app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors());
+
+app.use(
+  '/api/v1/billing/webhook',
+  express.raw({ type: 'application/json' }),
+  webhookRoute.router,
+);
+
 app.use(express.json());
 app.use(
   rateLimit({
@@ -39,6 +50,7 @@ app.use('/api/v1/contacts', authMiddleware, contactRoute.router);
 app.use('/api/v1/items', authMiddleware, itemRoute.router);
 app.use('/api/v1/loans', authMiddleware, loanRoute.router);
 app.use('/api/v1/reminder-log', authMiddleware, reminderLogRoute.router);
+app.use('/api/v1/billing', authMiddleware, subscriptionRoute.router);
 
 app.use(notFound.handle);
 app.use(errorHandler.handle);
