@@ -16,6 +16,11 @@ const start = async () => {
     await connectDB(mongoURI);
     app.listen(port, () => {
       console.log(`Server is listening at port ${port}...`);
+      // temporarily, in index.ts or wherever config loads
+      console.log(
+        '[startup] Webhook secret loaded:',
+        config.stripe.webhookSecret?.slice(0, 10) + '...',
+      );
       startReminderScheduler();
     });
   } catch (error) {
