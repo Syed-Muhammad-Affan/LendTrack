@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { SubscriptionController } from '../controllers/subscription.controller.js';
 import { validate } from '../middleware/zod.middleware.js';
-import { emptyBodySchema } from '../validators/emptyBody.validator.js';
 
 export class SubscriptionRoute {
   public readonly router: Router;
