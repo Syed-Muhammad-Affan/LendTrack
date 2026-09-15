@@ -1,3 +1,4 @@
+import './openapi/zod-extent.js';
 import app from './app.js';
 import connectDB from './db/connect.js';
 import { config } from './config/config.js';
@@ -16,11 +17,6 @@ const start = async () => {
     await connectDB(mongoURI);
     app.listen(port, () => {
       console.log(`Server is listening at port ${port}...`);
-      // temporarily, in index.ts or wherever config loads
-      console.log(
-        '[startup] Webhook secret loaded:',
-        config.stripe.webhookSecret?.slice(0, 10) + '...',
-      );
       startReminderScheduler();
     });
   } catch (error) {
