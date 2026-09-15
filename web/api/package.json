@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^9.1.0",
+    "@scalar/express-api-reference": "^0.10.18",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cron": "^4.4.0",
