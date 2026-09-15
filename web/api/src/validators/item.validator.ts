@@ -1,11 +1,13 @@
 import z from 'zod';
 
-export const createItemSchema = z.object({
-  name: z.string().max(50).trim(),
-  photo: z.string().optional(),
-  description: z.string().trim(),
-  category: z.string().trim(),
-});
+export const createItemSchema = z
+  .object({
+    name: z.string().max(50).trim(),
+    photo: z.string().optional(),
+    description: z.string().trim(),
+    category: z.string().trim(),
+  })
+  .openapi('CreateItemInput');
 
 export const updateItemSchema = z
   .object({
@@ -32,15 +34,20 @@ export const updateItemSchema = z
     {
       message: 'At least one field is required to update',
     },
-  );
+  )
+  .openapi('UpdateItemInput');
 
-export const itemIDParamsSchema = z.object({
-  id: z.string().min(1),
-});
+export const itemIDParamsSchema = z
+  .object({
+    id: z.string().min(1),
+  })
+  .openapi('ItemIdParams');
 
-export const archiveQuerySchema = z.object({
-  archive: z.enum(['true', 'false']).optional(),
-});
+export const archiveQuerySchema = z
+  .object({
+    archived: z.enum(['true', 'false']).optional(),
+  })
+  .openapi('ArchiveQuery');
 
 export type CreateItemInput = z.infer<typeof createItemSchema>;
 export type UpdateItemInput = z.infer<typeof updateItemSchema>;
