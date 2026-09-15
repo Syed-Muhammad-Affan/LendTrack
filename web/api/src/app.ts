@@ -12,6 +12,8 @@ import { createLoanModule } from './containers/loan.container.js';
 import { createReminderLogModule } from './containers/reminderLog.container.js';
 import { createSubscriptionModule } from './containers/subscription.container.js';
 import { createWebhookModule } from './containers/webhook.container.js';
+import { apiReference } from '@scalar/express-api-reference';
+import { generateOpenApiDocument } from './openapi/generate-document.js';
 
 const errorHandler = new ErrorHandler();
 const notFound = new NotFound();
@@ -41,6 +43,31 @@ app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
+  }),
+);
+
+const openApiDocument = generateOpenApiDocument();
+
+app.get('/openapi.json', (req, res) => {
+  res.json(openApiDocument);
+});
+
+app.use(
+  '/docs',
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+        'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+        'img-src': ["'self'", 'data:', 'https:'],
+        'connect-src': ["'self'", 'https://cdn.jsdelivr.net'],
+      },
+    },
+  }),
+  apiReference({
+    spec: { url: '/openapi.json' },
+    theme: 'purple',
   }),
 );
 
