@@ -1,7 +1,11 @@
 // openapi/generate-document.ts
 import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { registry } from './registry.js';
-import './paths/item.path.js'; // side-effect imports — each file calls registry.registerPath(...)
+import './paths/item.path.js';
+import './paths/loan.path.js';
+import './paths/contact.path.js';
+import './paths/reminderLog.path.js';
+import './paths/subscription.path.js';
 
 export function generateOpenApiDocument() {
   const generator = new OpenApiGeneratorV3(registry.definitions);
