@@ -23,7 +23,8 @@ export const createLoanSchema = z
   .refine((data) => data.direction !== 'borrowed' || !!data.borrowedItemName, {
     message: 'item description is required when direction is borrowed',
     path: ['itemId'],
-  });
+  })
+  .openapi('CreateLoan');
 
 // PATCH /loans/:id — body
 export const updateLoanSchema = z
@@ -57,19 +58,24 @@ export const updateLoanSchema = z
       message: 'Must be after loaned_at',
       path: ['expectedReturnAt'],
     },
-  );
+  )
+  .openapi('UpdateLoan');
 
 // :id route params — used by getSingleLoan, updateLoan, deleteLoan, markAsReturn, markAsLost
-export const loanIdParamsSchema = z.object({
-  id: z.string().min(1),
-});
+export const loanIdParamsSchema = z
+  .object({
+    id: z.string().min(1),
+  })
+  .openapi('LoanIdParams');
 
 // GET /loans — query filters
-export const loanFilterSchema = z.object({
-  status: z.enum(['active', 'returned', 'overdue', 'lost']).optional(),
-  contactId: z.string().optional(),
-  direction: z.enum(['lent_out', 'borrowed']).optional(),
-});
+export const loanFilterSchema = z
+  .object({
+    status: z.enum(['active', 'returned', 'overdue', 'lost']).optional(),
+    contactId: z.string().optional(),
+    direction: z.enum(['lent_out', 'borrowed']).optional(),
+  })
+  .openapi('LoanFilter');
 
 export type CreateLoanInput = z.infer<typeof createLoanSchema>;
 export type UpdateLoanInput = z.infer<typeof updateLoanSchema>;
