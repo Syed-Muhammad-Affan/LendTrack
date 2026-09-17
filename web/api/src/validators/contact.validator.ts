@@ -1,15 +1,19 @@
 import z from 'zod';
 
-export const createContactSchema = z.object({
-  name: z.string().max(50).trim(),
-  email: z.email('Invalid email').optional(),
-  phone: z.string().trim().optional(),
-  notes: z.string().trim(),
-});
+export const createContactSchema = z
+  .object({
+    name: z.string().max(50).trim(),
+    email: z.email('Invalid email').optional(),
+    phone: z.string().trim().optional(),
+    notes: z.string().trim(),
+  })
+  .openapi('CreateContact');
 
-export const contactParamsSchema = z.object({
-  id: z.string().min(1),
-});
+export const contactParamsSchema = z
+  .object({
+    id: z.string().min(1),
+  })
+  .openapi('ContactParams');
 
 export const updateContactSchema = z
   .object({
@@ -34,7 +38,8 @@ export const updateContactSchema = z
     {
       message: 'At least one field is required to update',
     },
-  );
+  )
+  .openapi('UpdateContact');
 
 export type CreateContactInput = z.infer<typeof createContactSchema>;
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
