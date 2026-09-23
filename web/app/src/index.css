@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Light Mode Color Scheme */
+  --color-LBackground: #ffffff;
+  --color-LSurface: #e1ffc7;
+  --color-LText: #111827;
+  --color-LMutedText: #979f90;
+  --color-LBorder: #a9ff5c;
+  --color-LPrimary: #a9ff5c;
+  --color-LSecondary: #1f2b15;
+  --color-LHighlight: #e1ffc7;
+
+  /* Dark Mode Color Scheme */
+  --color-DBackground: #090d06;
+  --color-DSurface: #1f2b15;
+  --color-DText: #f1fbe8;
+  --color-DMutedText: #979f90;
+  --color-DBorder: #a9ff5c;
+  --color-DPrimary: #a9ff5c;
+  --color-DSecondary: #1f2b15;
+  --color-DHighlight: #e1ffc7;
+}
+
+body {
+  font-family: 'Oswald', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1; /* This pushes footer down */
+}
+
+h1 {
+  font-size: var(--text-5xl);
+  line-height: var(--text-5xl--line-height);
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+h2 {
+  font-size: var(--text-4xl);
+  line-height: var(--text-4xl--line-height);
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+h3 {
+  font-size: var(--text-3xl);
+  line-height: var(--text-3xl--line-height);
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+p {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+/* .range {
+  width: 100%;
+  appearance: none;
+  height: 6px;
+  border-radius: 5px;
+  background: linear-gradient(
+    to right,
+    var(--color-LPrimary) 0%,
+    var(--color-LPrimary) 34%,
+    var(--color-LSecondary) 34%,
+    var(--color-LSecondary) 68% var(--color-LHighlight) 68%
+      var(--color-LHighlight) 100%
+  );
+} */
+
+.range {
+  appearance: none;
+  outline: none;
+  height: 20px;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 20px;
+  background: var(--color-LPrimary); /* Tailwind gray-300 */
+  border-radius: 9999px;
+  padding: 0px 4px;
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  background: var(--color-DBackground); /* Tailwind blue-500 */
+  border-radius: 9999px;
+  cursor: pointer;
+  margin-top: 2px;
+}
