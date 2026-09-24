@@ -4,6 +4,7 @@ import { NotFound } from './middleware/notFound.js';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { createAuthModule } from './containers/auth.container.js';
 import { createContactModule } from './containers/contact.container.js';
 import { authMiddleware } from './middleware/auth.js';
@@ -14,6 +15,7 @@ import { createSubscriptionModule } from './containers/subscription.container.js
 import { createWebhookModule } from './containers/webhook.container.js';
 import { apiReference } from '@scalar/express-api-reference';
 import { generateOpenApiDocument } from './openapi/generate-document.js';
+import { config } from './config/config.js';
 
 const errorHandler = new ErrorHandler();
 const notFound = new NotFound();
@@ -30,7 +32,12 @@ const webhookRoute = createWebhookModule();
 
 app.set('trust proxy', 1);
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: config.app.frontend_url,
+    credentials: true,
+  }),
+);
 
 app.use(
   '/api/v1/billing/webhook',
@@ -39,6 +46,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
