@@ -33,6 +33,11 @@ export class AuthRoute {
     );
 
     this.router.post(
+      '/logout',
+      this.AuthController.logout.bind(this.AuthController),
+    );
+
+    this.router.post(
       '/forgot-password',
       forgotPasswordLimiter,
       validate({ body: forgotPasswordSchema }),
