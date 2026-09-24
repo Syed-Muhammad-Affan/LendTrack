@@ -14,6 +14,7 @@ const envSchema = z.object({
   MAIL_PASSWORD: z.string().min(1),
 
   APP_URL: z.string(),
+  FRONTEND_URL: z.string(),
 
   RESET_TOKEN_EXPIRY_MINUTES: z.coerce.number().positive().default(15),
 
@@ -35,7 +36,7 @@ export const config = {
 
   jwt: {
     secret: env.JWT_SECRET,
-    lifetime: '30d' as const,
+    lifetime: '7d' as const,
   },
 
   mail: {
@@ -47,6 +48,7 @@ export const config = {
 
   app: {
     url: env.APP_URL,
+    frontend_url: env.FRONTEND_URL,
   },
 
   resetToken: {
