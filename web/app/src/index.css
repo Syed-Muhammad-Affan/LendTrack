@@ -2,24 +2,24 @@
 
 @theme {
   /* Light Mode Color Scheme */
-  --color-LBackground: #ffffff;
-  --color-LSurface: #e1ffc7;
-  --color-LText: #111827;
-  --color-LMutedText: #979f90;
-  --color-LBorder: #a9ff5c;
-  --color-LPrimary: #a9ff5c;
-  --color-LSecondary: #1f2b15;
-  --color-LHighlight: #e1ffc7;
+  --color-l-background: #ffffff;
+  --color-l-surface: #e1ffc7;
+  --color-l-text: #111827;
+  --color-l-muted-text: #979f90;
+  --color-l-border: #a9ff5c;
+  --color-l-primary: #a9ff5c;
+  --color-l-secondary: #1f2b15;
+  --color-l-highlight: #e1ffc7;
 
   /* Dark Mode Color Scheme */
-  --color-DBackground: #090d06;
-  --color-DSurface: #1f2b15;
-  --color-DText: #f1fbe8;
-  --color-DMutedText: #979f90;
-  --color-DBorder: #a9ff5c;
-  --color-DPrimary: #a9ff5c;
-  --color-DSecondary: #1f2b15;
-  --color-DHighlight: #e1ffc7;
+  --color-d-background: #090d06;
+  --color-d-surface: #1f2b15;
+  --color-d-text: #f1fbe8;
+  --color-d-muted-text: #979f90;
+  --color-d-border: #a9ff5c;
+  --color-d-primary: #a9ff5c;
+  --color-d-secondary: #1f2b15;
+  --color-d-highlight: #e1ffc7;
 }
 
 body {
@@ -29,6 +29,7 @@ body {
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
 .page {
