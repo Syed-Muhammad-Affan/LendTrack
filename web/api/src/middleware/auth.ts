@@ -13,13 +13,7 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const authHeader = req.headers.authorization;
-
-  if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) {
-    throw new errors.Unauthenticated('Authentication Invalid');
-  }
-
-  const token = authHeader.split(' ')[1];
+  const token = req.cookies?.token;
 
   if (!token) {
     throw new errors.Unauthenticated('Authentication Invalid');
