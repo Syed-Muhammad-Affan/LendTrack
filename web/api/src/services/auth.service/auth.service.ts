@@ -82,6 +82,21 @@ export class AuthService implements IAuthService {
     return this.toAuthResponse(user, token);
   }
 
+  async getCurrentUser(userId: string): Promise<{ id: string; name: string; email: string; plan: 'free' | 'premium' }> {
+  const user = await this.UserRepository.getSingleUserById(userId);
+
+  if (!user) {
+    throw new errors.NotFound('User not found');
+  }
+
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    plan: user.plan,
+  };
+}
+
   async forgotPassword(email: string): Promise<IGenericResponse> {
     const user = await this.UserRepository.getSingleUserByEmail(email);
 
