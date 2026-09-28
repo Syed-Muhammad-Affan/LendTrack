@@ -6,4 +6,5 @@ export interface IAuthController {
   logout(req: Request, res: Response): Promise<Response>;
   forgotPassword(req: Request, res: Response): Promise<Response>;
   resetPassword(req: Request, res: Response): Promise<Response>;
+  me(req: Request, res: Response): Promise<Response>
 }

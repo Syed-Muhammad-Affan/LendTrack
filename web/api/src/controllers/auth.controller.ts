@@ -3,6 +3,7 @@ import { IAuthService } from '../services/auth.service/interface/auth.service.in
 import { IAuthController } from './interface/auth.controller.interface.js';
 import { BadRequest } from '../errors/bad-request.js';
 import { StatusCodes } from 'http-status-codes';
+import errors from '../errors/index.js';
 
 export class AuthController implements IAuthController {
   constructor(private readonly AuthService: IAuthService) {}
@@ -57,6 +58,22 @@ export class AuthController implements IAuthController {
       data: null,
     });
   }
+
+  async me(req: Request, res: Response): Promise<Response> {
+  const userId = req.user?.userId;
+
+  if (!userId) {
+    throw new errors.Unauthenticated('Authentication required');
+  }
+
+  const user = await this.AuthService.getCurrentUser(userId);
+
+  return res.status(StatusCodes.OK).json({
+    success: true,
+    message: 'Current user fetched successfully',
+    data: user,
+  });
+}
 
   async forgotPassword(req: Request, res: Response): Promise<Response> {
     const { email } = req.body;
