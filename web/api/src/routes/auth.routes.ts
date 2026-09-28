@@ -37,6 +37,8 @@ export class AuthRoute {
       this.AuthController.logout.bind(this.AuthController),
     );
 
+    this.router.get('/me', this.AuthController.me.bind(this.AuthController));
+
     this.router.post(
       '/forgot-password',
       forgotPasswordLimiter,
