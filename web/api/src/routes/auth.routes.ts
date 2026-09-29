@@ -9,6 +9,7 @@ import {
   tokenParamsSchema,
 } from '../validators/auth.validator.js';
 import { forgotPasswordLimiter } from '../middleware/forgotPasswordLimiter.middleware.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 export class AuthRoute {
   public readonly router: Router;
@@ -37,7 +38,7 @@ export class AuthRoute {
       this.AuthController.logout.bind(this.AuthController),
     );
 
-    this.router.get('/me', this.AuthController.me.bind(this.AuthController));
+    this.router.get('/me', authMiddleware, this.AuthController.me.bind(this.AuthController));
 
     this.router.post(
       '/forgot-password',
