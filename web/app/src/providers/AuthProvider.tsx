@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { apiClient } from '../lib/apiClient';
+import { apiClient } from '../api/apiClient';
 import { AuthContext } from '../context/AuthContext';
 import type { AuthUser } from '../types/auth';
+import { authApi } from '@/api/endpoints/auth';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -43,18 +44,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    const res = await apiClient.post('/auth/login', { email, password });
+    const res = await authApi.login(email, password);
     setUser(res.data.data);
   }, []);
 
   const register = useCallback(async (name: string, email: string, password: string) => {
-    const res = await apiClient.post('/auth/register', { name, email, password });
+    const res = await authApi.register(name, email, password);
     setUser(res.data.data);
   }, []);
 
   const logout = useCallback(async () => {
     try {
-      await apiClient.post('/auth/logout');
+      await authApi.logout();
     } finally {
       setUser(null);
     }
