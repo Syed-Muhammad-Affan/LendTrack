@@ -1,10 +1,22 @@
-import { apiClient } from "@/api/apiClient";
-import type { CreateItemInput } from "@/types/item";
+import type { DeleteResponse } from '@/types/common';
+import { apiClient } from '../apiClient';
+import type { CreateItemInput, ItemResponse, UpdateItemInput } from '@/features/items/types';
 
 export const itemsApi = {
-    create: ({category, description, name, photo}: CreateItemInput) => apiClient.post('/items', { name, description, category, photo }),
-    getAll: () => apiClient.get('/items'),
-    getSingle: () => apiClient.get('/item/:id'),
-    update: (category :string, description: string, name: string, photo: string) => apiClient.post('/items/:id', { category, description, name, photo }),
-    delete: () => apiClient.delete('/item/:id'),
-}
+  getAll: (archived?: boolean) =>
+    apiClient.get<{ success: boolean; message: string; data: ItemResponse[] }>('/items', {
+      params: archived === undefined ? {} : { archived: String(archived) },
+    }),
+
+  getOne: (id: string) =>
+    apiClient.get<{ success: boolean; message: string; data: ItemResponse }>(`/items/${id}`),
+
+  create: (body: CreateItemInput) =>
+    apiClient.post<{ success: boolean; message: string; data: ItemResponse }>('/items', body),
+
+  update: (id: string, body: UpdateItemInput) =>
+    apiClient.patch<{ success: boolean; message: string; data: ItemResponse }>(`/items/${id}`, body),
+
+  remove: (id: string) =>
+    apiClient.delete<{ success: boolean; message: string; data: DeleteResponse }>(`/items/${id}`),
+};
