@@ -118,7 +118,7 @@ export class LoanService implements ILoanService {
       }
 
       const itemOwned = await this.ItemRepository.itemExists(
-        data.contactId.toString(),
+        data.itemId.toString(),
         userId,
       );
       if (!itemOwned) {
