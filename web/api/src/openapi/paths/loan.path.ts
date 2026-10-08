@@ -58,6 +58,7 @@ export const loanSummaryResponseSchema = z
         item: loanItemSummarySchema.optional(),
         contact: loanContactSummarySchema,
         expectedReturnAt: z.string().datetime(),
+        direction: z.enum(['lent_out', 'borrowed']),
       }),
     ),
   })
