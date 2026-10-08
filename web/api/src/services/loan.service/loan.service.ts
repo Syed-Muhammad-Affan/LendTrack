@@ -75,6 +75,7 @@ export class LoanService implements ILoanService {
       id: loan._id.toString(),
       contact: this.buildContactSummary(loan.contactId),
       expectedReturnAt: loan.expectedReturnAt,
+      direction: loan.direction,
     };
 
     if (loan.itemId) {
