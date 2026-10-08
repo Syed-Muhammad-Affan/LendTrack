@@ -182,6 +182,7 @@ export class LoanRepository implements ILoanRepository {
       })
         .populate('itemId')
         .populate('contactId')
+        .sort({ expectedReturnAt: 1 })
         .lean(),
     ]);
 
