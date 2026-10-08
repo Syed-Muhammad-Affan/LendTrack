@@ -34,6 +34,7 @@ export interface IUpcomingDueLoan {
   item?: ILoanItemSummary;
   itemDescription?: string;
   contact: ILoanContactSummary;
+  direction: 'lent_out' | 'borrowed';
   expectedReturnAt: Date;
 }
 
