@@ -40,6 +40,7 @@ export interface LoanSummaryResponse {
     item?: LoanItemSummary;
     contact: LoanContactSummary;
     expectedReturnAt: string;
+    direction: 'lent_out' | 'borrowed';
   }>;
 }
 
@@ -58,4 +59,13 @@ export interface LoanFilters {
   status?: 'active' | 'returned' | 'overdue' | 'lost';
   contactId?: string;
   direction?: 'lent_out' | 'borrowed';
+}
+
+export interface UpcomingDueLoan {
+  id: string;
+  item?: LoanItemSummary;
+  borrowedItemName?: string;
+  contact: LoanContactSummary;
+  expectedReturnAt: string;
+  direction: 'lent_out' | 'borrowed';
 }
