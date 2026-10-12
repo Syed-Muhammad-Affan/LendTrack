@@ -21,7 +21,7 @@ interface SummaryCardsProps {
 
 export function SummaryCards({ summary }: SummaryCardsProps) {
   const cards = [
-    { label: "Total", value: summary.total, icon: ClipboardCheck },
+    { label: "Total Loans", value: summary.total, icon: ClipboardCheck },
     {
       label: "Lent Out",
       value: summary.lentOut,
