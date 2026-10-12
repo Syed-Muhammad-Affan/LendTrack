@@ -24,7 +24,7 @@ export function AppLayout() {
             <TransactionButton />
           </div>
         </header>
-        <main className="flex-1 p-6">
+        <main>
           <Outlet />
         </main>
       </SidebarInset>
