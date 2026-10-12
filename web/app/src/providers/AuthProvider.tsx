@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { ReactNode } from 'react';
-import { apiClient } from '../api/apiClient';
-import { AuthContext } from '../context/AuthContext';
-import type { AuthUser } from '../types/auth';
-import { authApi } from '@/api/endpoints/auth';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { apiClient } from "../api/apiClient";
+import { AuthContext } from "../context/AuthContext";
+import type { AuthUser } from "../features/auth/types";
+import { authApi } from "@/api/endpoints/auth";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -12,7 +12,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Manual re-check, exposed through context — e.g. after updating profile/subscription elsewhere.
   const refreshUser = useCallback(async () => {
     try {
-      const res = await apiClient.get('/auth/me');
+      const res = await apiClient.get("/auth/me");
       setUser(res.data.data);
     } catch {
       setUser(null);
@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     async function loadUser() {
       try {
-        const res = await apiClient.get('/auth/me');
+        const res = await apiClient.get("/auth/me");
         if (!cancelled) setUser(res.data.data);
       } catch {
         if (!cancelled) setUser(null);
@@ -48,10 +48,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.data);
   }, []);
 
-  const register = useCallback(async (name: string, email: string, password: string) => {
-    const res = await authApi.register(name, email, password);
-    setUser(res.data.data);
-  }, []);
+  const register = useCallback(
+    async (name: string, email: string, password: string) => {
+      const res = await authApi.register(name, email, password);
+      setUser(res.data.data);
+    },
+    [],
+  );
 
   const logout = useCallback(async () => {
     try {
