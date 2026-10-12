@@ -138,7 +138,12 @@ export function AppSidebar() {
             {user?.name?.charAt(0)}
           </span>
           <span className="truncate capitalize">{user?.name}</span>
-          <Button variant="ghost" size="sm" onClick={logout}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="cursor-pointer"
+            onClick={logout}
+          >
             <SquareArrowRightExit />
           </Button>
         </div>
