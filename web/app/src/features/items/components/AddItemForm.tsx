@@ -1,5 +1,5 @@
 import { itemsApi } from "@/api/endpoints/items";
-import type { CreateItemInput } from "@/types/item";
+import type { CreateItemInput } from "@/features/items/types";
 import { useState, type FormEvent } from "react";
 import { Label } from "../../../../@/components/ui/label";
 import { parseApiError } from "@/lib/apiError";
@@ -36,6 +36,7 @@ export function AddItemForm({ onSuccess }: ItemFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col px-8 py-5 gap-6">
+      <h3>Add Item</h3>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="name">Name:</Label>
@@ -89,7 +90,7 @@ export function AddItemForm({ onSuccess }: ItemFormProps) {
           )}
         </div>
       </div>
-      <Button type="submit" className="w-full">
+      <Button type="submit" className="w-full cursor-pointer">
         Add Item
       </Button>
       {error && <p className="text-sm text-red-600">{error}</p>}
