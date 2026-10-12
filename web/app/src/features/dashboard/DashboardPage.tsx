@@ -1,18 +1,30 @@
-import { useAuth } from "../../hooks/useAuth";
-
+import { useLoanSummary } from "../loans/hooks/useLoanSummary";
+import { SummaryCards } from "./components/SummaryCards";
+import { UpcomingDueList } from "./components/UpcomingDueList";
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth();
+  const { summary, isLoading, error, refetch } = useLoanSummary();
+
+  if (isLoading) {
+    return (
+      <div className="p-6 text-center text-muted-foreground">
+        Loading dashboard...
+      </div>
+    );
+  }
+
+  if (error || !summary) {
+    return (
+      <div className="p-6 text-center text-red-600">
+        {error ?? "Failed to load dashboard"}
+      </div>
+    );
+  }
 
   return (
-    <main className="mx-auto mt-16 max-w-2xl p-6">
-      <h1 className="text-2xl font-semibold">Welcome, {user?.name}</h1>
-      <p className="mt-2">Plan: {user?.plan}</p>
-
-      {/* logout() clears the user, so ProtectedRoute redirects to /login automatically */}
-      <button onClick={logout} className="mt-6 rounded border px-4 py-2">
-        Log out
-      </button>
-    </main>
+    <>
+      <SummaryCards summary={summary} />
+      <UpcomingDueList items={summary.upcomingDueItems} onChanged={refetch} />
+    </>
   );
 }
