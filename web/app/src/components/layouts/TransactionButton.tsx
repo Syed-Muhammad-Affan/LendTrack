@@ -30,13 +30,13 @@ export function TransactionButton() {
       <DialogTrigger asChild>
         <Button size="lg" className="font-bold text-sm cursor-pointer">
           <Plus />
-          Transaction
+          New Transaction
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Add new</DialogTitle>
+          <DialogTitle>New Transaction</DialogTitle>
           <DialogDescription>
             Create an item, contact, or log a loan.
           </DialogDescription>
