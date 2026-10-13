@@ -8,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../../@/components/ui/card";
-import { ArrowDownLeft, ArrowUpRight, Badge } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { Button } from "../../../../@/components/ui/button";
+import { Badge } from "../../../../@/components/ui/badge";
 
 interface UpcomingDueCardProps {
   loan: UpcomingDueLoan;
