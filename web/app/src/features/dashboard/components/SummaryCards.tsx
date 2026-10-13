@@ -65,7 +65,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
           return (
             <Card
               key={card.label}
-              className="gap-2 [--card-spacing:--spacing(6)] h-full justify-between"
+              className="gap-2 [--card-spacing:--spacing(6)] h-full justify-between transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-primary hover:shadow-xl hover:shadow-primary/10 dark:hover:shadow-primary/20"
             >
               <CardHeader className="pb-2 flex justify-between">
                 <CardTitle className="text-sm font-medium text-muted-foreground">

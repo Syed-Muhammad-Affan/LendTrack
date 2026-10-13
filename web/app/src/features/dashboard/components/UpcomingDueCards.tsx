@@ -35,7 +35,10 @@ export function UpcomingDueCard({ loan, onChanged }: UpcomingDueCardProps) {
   };
 
   return (
-    <Card key={loan.id} className="w-full">
+    <Card
+      key={loan.id}
+      className="w-full transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-primary hover:shadow-xl hover:shadow-primary/10 dark:hover:shadow-primary/20 px-2"
+    >
       <CardHeader className="flex items-center justify-between gap-5">
         <CardTitle className="text-3xl">
           {loan.item?.name ?? loan.borrowedItemName ?? "Item"}
