@@ -2,9 +2,9 @@ import { Router } from 'express';
 import { IItemController } from '../controllers/interface/item.controller.interface.js';
 import { validate } from '../middleware/zod.middleware.js';
 import {
-  archiveQuerySchema,
   createItemSchema,
   itemIDParamsSchema,
+  itemQuerySchema,
   updateItemSchema,
 } from '../validators/item.validator.js';
 
@@ -25,9 +25,14 @@ export class ItemRoute {
 
     this.router.get(
       '/',
-      validate({ query: archiveQuerySchema }),
+      validate({ query: itemQuerySchema }),
       this.ItemController.getAllItem.bind(this.ItemController),
     );
+
+    this.router.get(
+      '/categories',
+      this.ItemController.getCategories.bind(this.ItemController),
+    )
 
     this.router.get(
       '/:id',
