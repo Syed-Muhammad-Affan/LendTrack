@@ -4,6 +4,7 @@ import { IItemService } from './interface/item.service.interface.js';
 import { IItemRepository } from '../../repository/interface/item.repository.interface.js';
 import errors from '../../errors/index.js';
 import { IItemResponse } from './interface/itemResponse.interface.js';
+import { IItemFilters } from '../../repository/interface/allItemFilter.interface.js';
 
 export class ItemService implements IItemService {
   private toItemResponse(item: IItem): IItemResponse {
@@ -39,17 +40,17 @@ export class ItemService implements IItemService {
 
   async getAllItem(
     userId: string,
-    isArchived?: boolean,
+    filters: IItemFilters,
   ): Promise<IItemResponse[]> {
-    const filter: any = { userId };
+    // const filter: any = { userId };
 
-    if (isArchived === undefined) {
-      filter.isArchived = false;
-    } else {
-      filter.isArchived = isArchived;
-    }
+    // if (isArchived === undefined) {
+    //   filter.isArchived = false;
+    // } else {
+    //   filter.isArchived = isArchived;
+    // }
 
-    const items = await this.ItemRepository.getAllItem(filter);
+    const items = await this.ItemRepository.getAllItem(userId, filters);
 
     return items.map((item) => this.toItemResponse(item));
   }
@@ -86,5 +87,11 @@ export class ItemService implements IItemService {
     }
 
     return this.toItemResponse(item);
+  }
+
+  async getCategories(userId: string): Promise<string[]> {
+    const categories = await this.ItemRepository.getCategories(userId)
+
+    return categories;
   }
 }
