@@ -18,7 +18,7 @@ export function UpcomingDueList({ items, onChanged }: UpcomingDueListProps) {
             Nothing due in the next 7 days.
           </p>
         ) : (
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-5">
             {items.map((loan) => (
               <UpcomingDueCard
                 key={loan.id}
