@@ -21,9 +21,9 @@ interface SummaryCardsProps {
 
 export function SummaryCards({ summary }: SummaryCardsProps) {
   const cards = [
-    { label: "Total Loans", value: summary.total, icon: ClipboardCheck },
+    { label: "TOTAL LOANS", value: summary.total, icon: ClipboardCheck },
     {
-      label: "Lent Out",
+      label: "LENT OUT",
       value: summary.lentOut,
       icon: ArrowUpRight,
       iconStyle:
@@ -33,14 +33,14 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300",
     },
     {
-      label: "Borrowed",
+      label: "BORROWED",
       value: summary.borrowed,
       icon: ArrowDownLeft,
       iconStyle:
         "bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300",
     },
     {
-      label: "Due Soon",
+      label: "DUE SOON",
       value: summary.upcomingDueCount,
       icon: Clock,
       iconStyle: "bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300",
@@ -48,7 +48,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
       badgeStyle: "bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300",
     },
     {
-      label: "Overdue",
+      label: "OVERDUE",
       value: summary.overdue,
       icon: AlertCircle,
       iconStyle: "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300",
