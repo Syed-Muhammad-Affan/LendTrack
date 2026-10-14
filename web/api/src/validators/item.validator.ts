@@ -43,13 +43,19 @@ export const itemIDParamsSchema = z
   })
   .openapi('ItemIdParams');
 
-export const archiveQuerySchema = z
-  .object({
-    archived: z.enum(['true', 'false']).optional(),
-  })
-  .openapi('ArchiveQuery');
+// export const itemQuerySchema = z
+//   .object({
+//     archived: z.enum(['true', 'false']).optional(),
+//   })
+//   .openapi('ArchiveQuery');
+
+export const itemQuerySchema = z.object({
+  archived: z.enum(['true', 'false']).optional(),
+  name: z.string().trim().max(50).optional(),
+  category: z.string().trim().max(50).optional(),
+}).openapi('ArchiveQuery');;
 
 export type CreateItemInput = z.infer<typeof createItemSchema>;
 export type UpdateItemInput = z.infer<typeof updateItemSchema>;
 export type ItemIDParamsInput = z.infer<typeof itemIDParamsSchema>;
-export type ArchiveParamsSchema = z.infer<typeof archiveQuerySchema>;
+export type ItemParamsSchema = z.infer<typeof itemQuerySchema>;
