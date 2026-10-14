@@ -53,21 +53,21 @@ h1 {
   font-size: var(--text-5xl);
   line-height: var(--text-5xl--line-height);
   font-weight: bold;
-  font-family: 'Oswald', sans-serif;
+  /* font-family: 'Oswald', sans-serif; */
 }
 
 h2 {
   font-size: var(--text-4xl);
   line-height: var(--text-4xl--line-height);
   font-weight: bold;
-  font-family: 'Oswald', sans-serif;
+  /* font-family: 'Oswald', sans-serif; */
 }
 
 h3 {
   font-size: var(--text-3xl);
   line-height: var(--text-3xl--line-height);
   font-weight: bold;
-  font-family: 'Oswald', sans-serif;
+  /* font-family: 'Oswald', sans-serif; */
 }
 
 p {
