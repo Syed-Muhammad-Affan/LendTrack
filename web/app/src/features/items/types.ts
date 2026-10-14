@@ -17,4 +17,10 @@ export interface CreateItemInput {
   photo?: string;
 }
 
+export interface ItemFilters {
+  archived?: boolean;
+  name?: string;
+  category?: string;
+}
+
 export type UpdateItemInput = Partial<CreateItemInput> & { isArchived?: boolean };
