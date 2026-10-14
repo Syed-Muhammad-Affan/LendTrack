@@ -6,4 +6,5 @@ export interface IItemController {
   getSingleItem(req: Request, res: Response): Promise<Response>;
   updateItem(req: Request, res: Response): Promise<Response>;
   deleteItem(req: Request, res: Response): Promise<Response>;
+  getCategories(req: Request, res: Response): Promise<Response>;
 }

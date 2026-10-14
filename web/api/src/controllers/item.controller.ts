@@ -3,6 +3,8 @@ import { IItemController } from './interface/item.controller.interface.js';
 import { IItemService } from '../services/item.service/interface/item.service.interface.js';
 import errors from '../errors/index.js';
 import { StatusCodes } from 'http-status-codes';
+import { IItemFilters } from '../repository/interface/allItemFilter.interface.js';
+// import { IAllItemFilter, IItemFilters } from '../repository/interface/allItemFilter.interface.js';
 
 export class ItemController implements IItemController {
   constructor(private readonly ItemService: IItemService) {}
@@ -26,16 +28,28 @@ export class ItemController implements IItemController {
   async getAllItem(req: Request, res: Response): Promise<Response> {
     const userId = req.user?.userId;
 
-    const archived =
-      req.query.archived === undefined
-        ? undefined
-        : req.query.archived === 'true';
+    // const archived =
+    //   req.query.archived === undefined
+    //     ? undefined
+    //     : req.query.archived === 'true';
 
     if (!userId) {
       throw new errors.Unauthenticated('Authentication required');
     }
 
-    const items = await this.ItemService.getAllItem(userId, archived);
+    const filters: IItemFilters = {};
+
+if (typeof req.query.archived === 'string') {
+  filters.isArchived = req.query.archived === 'true';
+}
+if (typeof req.query.name === 'string' && req.query.name) {
+  filters.name = req.query.name;
+}
+if (typeof req.query.category === 'string' && req.query.category) {
+  filters.category = req.query.category;
+}
+
+    const items = await this.ItemService.getAllItem(userId, filters);
 
     return res.status(StatusCodes.OK).json({
       success: true,
@@ -107,6 +121,22 @@ export class ItemController implements IItemController {
       success: true,
       message: 'Item deleted',
       data: item,
+    });
+  }
+
+  async getCategories(req: Request, res: Response): Promise<Response> {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      throw new errors.Unauthenticated('Authentication required');
+    }
+
+    const categories = await this.ItemService.getCategories(userId);
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: 'All Categories',
+      data: categories,
     });
   }
 }
