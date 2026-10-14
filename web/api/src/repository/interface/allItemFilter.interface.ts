@@ -1,4 +1,10 @@
-export interface IAllItemFilter {
-  userId: string;
-  isArchived: boolean;
+// export interface IAllItemFilter {
+//   userId: string;
+// }
+
+export interface IItemFilters {
+    isArchived?: boolean;
+  name?: string;
+  category?: string;
 }
+
