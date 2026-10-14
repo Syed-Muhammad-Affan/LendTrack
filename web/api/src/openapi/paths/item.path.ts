@@ -4,7 +4,7 @@ import { registry, bearerAuth } from '../registry.js';
 import {
   createItemSchema,
   itemIDParamsSchema,
-  archiveQuerySchema,
+  itemQuerySchema,
   updateItemSchema,
 } from '../../validators/item.validator.js';
 import { itemResponseSchema } from '../../services/item.service/interface/itemResponse.interface.js';
@@ -34,7 +34,7 @@ registry.registerPath({
   tags: ['Items'],
   summary: 'List items (defaults to non-archived)',
   security: [{ [bearerAuth.name]: [] }],
-  request: { query: archiveQuerySchema },
+  request: { query: itemQuerySchema },
   responses: {
     200: {
       description: 'List of items',
