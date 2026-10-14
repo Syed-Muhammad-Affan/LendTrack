@@ -1,12 +1,19 @@
 import type { DeleteResponse } from '@/types/common';
 import { apiClient } from '../apiClient';
-import type { CreateItemInput, ItemResponse, UpdateItemInput } from '@/features/items/types';
+import type { CreateItemInput, ItemFilters, ItemResponse, UpdateItemInput } from '@/features/items/types';
 
 export const itemsApi = {
-  getAll: (archived?: boolean) =>
-    apiClient.get<{ success: boolean; message: string; data: ItemResponse[] }>('/items', {
-      params: archived === undefined ? {} : { archived: String(archived) },
-    }),
+  getAll: (filters: ItemFilters = {}) =>
+  apiClient.get<{ success: boolean; message: string; data: ItemResponse[] }>('/items', {
+    params: {
+      ...(filters.archived !== undefined && { archived: String(filters.archived) }),
+      ...(filters.name && { name: filters.name }),
+      ...(filters.category && { category: filters.category }),
+    },
+  }),
+
+  getCategories: () =>
+  apiClient.get<{ success: boolean; message: string; data: string[] }>('/items/categories'),
 
   getOne: (id: string) =>
     apiClient.get<{ success: boolean; message: string; data: ItemResponse }>(`/items/${id}`),
