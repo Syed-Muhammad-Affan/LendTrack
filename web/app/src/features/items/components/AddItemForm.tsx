@@ -5,6 +5,8 @@ import { Label } from "../../../../@/components/ui/label";
 import { parseApiError } from "@/lib/apiError";
 import { Input } from "../../../../@/components/ui/input";
 import { Button } from "../../../../@/components/ui/button";
+// import { useDataRefresh } from "@/hooks/useDataRefresh";
+import { notifyDataChanged } from "@/lib/events";
 
 interface ItemFormProps {
   onSuccess?: () => void;
@@ -19,6 +21,8 @@ export function AddItemForm({ onSuccess }: ItemFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+  // const { notifyChanged } = useDataRefresh();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
@@ -26,6 +30,8 @@ export function AddItemForm({ onSuccess }: ItemFormProps) {
 
     try {
       await itemsApi.create({ name, description, category, photo });
+      // await onChanged();
+      await notifyDataChanged();
       onSuccess?.(); // dialog closes itself; standalone page could navigate instead
     } catch (err) {
       const parsed = parseApiError(err);
@@ -52,7 +58,7 @@ export function AddItemForm({ onSuccess }: ItemFormProps) {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="name">Category:</Label>
+          <Label htmlFor="category">Category:</Label>
           <Input
             id="category"
             value={category}
@@ -65,7 +71,7 @@ export function AddItemForm({ onSuccess }: ItemFormProps) {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="name">Description:</Label>
+          <Label htmlFor="description">Description:</Label>
           <Input
             id="description"
             value={description}
@@ -78,7 +84,7 @@ export function AddItemForm({ onSuccess }: ItemFormProps) {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="name">Photo:</Label>
+          <Label htmlFor="photo">Photo:</Label>
           <Input
             id="photo"
             value={photo}
