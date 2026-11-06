@@ -8,22 +8,23 @@ import {
 import { Button } from "../../../@/components/ui/button";
 import { Plus } from "lucide-react";
 
-interface AddItemFormProps {
-  onSuccess: () => void;
-}
+// interface AddItemFormProps {
+//   onSuccess: () => void;
+// }
 
-interface AddFormsProps {
+interface AddFormsProps<P extends { onSuccess: () => void }> {
   formName: string;
-  FormComponent: React.ComponentType<AddItemFormProps>;
+  FormComponent: React.ComponentType<P>;
+  formProps?: Omit<P, "onSuccess">;
 }
 
-export function AddForms({ formName, FormComponent }: AddFormsProps) {
+export function AddForms<P extends { onSuccess: () => void }>({
+  formName,
+  FormComponent,
+  formProps,
+}: AddFormsProps<P>) {
   const [open, setOpen] = useState(false);
-  //   const [activeTab, setActiveTab] = useState("item");
-
-  const handleSuccess = () => {
-    setOpen(false); // close the dialog once the form submits successfully
-  };
+  const handleSuccess = () => setOpen(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -33,9 +34,8 @@ export function AddForms({ formName, FormComponent }: AddFormsProps) {
           Add {formName}
         </Button>
       </DialogTrigger>
-
       <DialogContent className="sm:max-w-lg">
-        <FormComponent onSuccess={handleSuccess} />
+        <FormComponent {...(formProps as P)} onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   );
