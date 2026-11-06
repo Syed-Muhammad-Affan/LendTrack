@@ -1,7 +1,12 @@
 {
   "files": [],
   "compilerOptions": {
-    "types": ["node"]
+    "ignoreDeprecations": "5.0",
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@shadcn/*": ["./@/*"]
+    }
   },
   "references": [
     { "path": "./tsconfig.app.json" },
