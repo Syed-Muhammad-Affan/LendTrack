@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { Button } from "../../../@/components/ui/button";
 import { AddItemForm } from "@/features/items/components/AddItemForm";
+import { AddContactForm } from "@/features/contacts/components/AddContactForm";
 
 export function TransactionButton() {
   const [open, setOpen] = useState(false);
@@ -55,7 +56,7 @@ export function TransactionButton() {
           </TabsContent>
 
           <TabsContent value="contact">
-            {/* <ContactForm onSuccess={handleSuccess} /> */}
+            <AddContactForm onSuccess={handleSuccess} />
           </TabsContent>
 
           <TabsContent value="lent_out">
