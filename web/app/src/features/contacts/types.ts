@@ -1,4 +1,3 @@
-// features/contacts/types.ts
 export interface ContactResponse {
   id: string;
   name: string;
@@ -17,3 +16,7 @@ export interface CreateContactInput {
 }
 
 export type UpdateContactInput = Partial<CreateContactInput>;
+
+export interface ContactFilters {
+  name?: string;
+}
