@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { ILoan } from '../../interface/loan.interface.js';
 import { ILoanRepository } from '../../repository/interface/loan.repository.interface.js';
 import { ILoanService } from './interface/loan.service.interface.js';
-import { isPremium } from '../../utils/plan.js';
+import { IPlanService } from '../plan.service/interface/plan.service.interface.js';
 import errors from '../../errors/index.js';
 import { ILoanFilters } from '../../repository/interface/loan.filter.interface.js';
 import {
@@ -93,6 +93,7 @@ export class LoanService implements ILoanService {
     private readonly LoanRepository: ILoanRepository,
     private readonly ItemRepository: IItemRepository,
     private readonly ContactRepository: IContactRepository,
+    private readonly PlanService: IPlanService,
   ) {}
 
   async createLoan(
@@ -137,7 +138,7 @@ export class LoanService implements ILoanService {
       }
     }
 
-    if (!(await isPremium(userId))) {
+    if (!(await this.PlanService.isPremium(userId))) {
       const activeLoan = await this.LoanRepository.countActiveLoan(userId);
 
       if (activeLoan >= 5) {
@@ -176,6 +177,25 @@ export class LoanService implements ILoanService {
     userId: string,
     body: Partial<ILoan>,
   ): Promise<ILoanResponse> {
+    if (body.contactId) {
+      const contactOwned = await this.ContactRepository.contactExists(
+        body.contactId.toString(),
+        userId,
+      );
+      if (!contactOwned) {
+        throw new errors.NotFound('Contact not found');
+      }
+    }
+
+    if (body.itemId) {
+      const itemOwned = await this.ItemRepository.itemExists(
+        body.itemId.toString(),
+        userId,
+      );
+      if (!itemOwned) {
+        throw new errors.NotFound('item not found');
+      }
+    }
     const loan = await this.LoanRepository.updateLoan(loanId, userId, body);
     if (!loan) {
       throw new errors.NotFound('Loan not found');

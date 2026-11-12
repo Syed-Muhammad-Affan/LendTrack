@@ -1,16 +1,17 @@
+import { objectIdSchema } from './common.validator.js';
 import z from 'zod';
 
 export const reminderLogQuerySchema = z
   .object({
     type: z.enum(['pre_due', 'overdue', 'weekly_digest']).optional(),
     status: z.enum(['sent', 'failed']).optional(),
-    loanId: z.string().optional(),
+    loanId: objectIdSchema.optional(),
   })
   .openapi('ReminderLogQuery');
 
 export const reminderLogIdParamsSchema = z
   .object({
-    id: z.string().min(1),
+    id: objectIdSchema,
   })
   .openapi('ReminderLogIdParams');
 

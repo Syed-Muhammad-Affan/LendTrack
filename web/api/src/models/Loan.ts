@@ -56,7 +56,7 @@ LoanSchema.pre('validate', function () {
 
   if (this.direction === 'borrowed' && !this.borrowedItemName) {
     throw new errors.BadRequest(
-      'itemDescription is required when direction is borrowed',
+      'borrowedItemName is required when direction is borrowed',
     );
   }
 });

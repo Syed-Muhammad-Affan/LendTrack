@@ -2,13 +2,14 @@ import { config } from '../../config/config.js';
 import errors from '../../errors/index.js';
 import { ISubscriptionRepository } from '../../repository/interface/subscription.repository.interface.js';
 import { IUserRepository } from '../../repository/interface/user.repository.interface.js';
-import { stripeClient } from '../stripe/stripe.client.js';
+import { IPaymentGateway } from '../payment/interface/payment.gateway.interface.js';
 import { ISubscriptionService } from './interface/subscription.service.interface.js';
 
 export class SubscriptionService implements ISubscriptionService {
   constructor(
     private readonly UserRepository: IUserRepository,
     private readonly SubscriptionRepository: ISubscriptionRepository,
+    private readonly PaymentGateway: IPaymentGateway,
   ) {}
 
   async createCheckoutSession(userId: string): Promise<{ url: string }> {
@@ -18,35 +19,27 @@ export class SubscriptionService implements ISubscriptionService {
       throw new errors.NotFound('User not found');
     }
 
-    let stripeCustomerId = user.stripeCustomerId;
+    let customerId = user.stripeCustomerId;
 
-    if (!stripeCustomerId) {
-      const customer = await stripeClient.customers.create({
-        email: user.email,
-        metadata: { userId },
+    if (!customerId) {
+      customerId = await this.PaymentGateway.createCustomer(user.email, userId);
+      await this.UserRepository.updateUser(userId, {
+        stripeCustomerId: customerId,
       });
-      stripeCustomerId = customer.id;
-
-      await this.UserRepository.updateUser(userId, { stripeCustomerId });
     }
 
-    const session = await stripeClient.checkout.sessions.create({
-      mode: 'subscription',
-      customer: stripeCustomerId,
-      line_items: [{ price: config.stripe.priceIdPremium, quantity: 1 }],
-      success_url: `${config.app.url}/settings/billing?success=true`,
-      cancel_url: `${config.app.url}/settings/billing?canceled=true`,
-      metadata: { userId }, // Metadata on Checkout Session
-      subscription_data: {
-        metadata: { userId }, // Metadata on the actual Subscription object
-      },
+    const url = await this.PaymentGateway.createSubscriptionCheckout({
+      customerId,
+      userId,
+      successUrl: `${config.app.url}/settings/billing?success=true`,
+      cancelUrl: `${config.app.url}/settings/billing?canceled=true`,
     });
 
-    if (!session.url) {
+    if (!url) {
       throw new errors.CustomApiError('Failed to create checkout session', 500);
     }
 
-    return { url: session.url };
+    return { url };
   }
 
   async getStatus(userId: string): Promise<{
@@ -76,12 +69,9 @@ export class SubscriptionService implements ISubscriptionService {
       throw new errors.NotFound('No active subscription found');
     }
 
-    // Cancel at period end, not immediately — user keeps access until they've paid for
-    await stripeClient.subscriptions.update(
+    // Cancel at period end so the paid-for access is kept
+    await this.PaymentGateway.cancelSubscriptionAtPeriodEnd(
       subscription.providerSubscriptionId,
-      {
-        cancel_at_period_end: true,
-      },
     );
   }
 }

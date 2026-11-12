@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { SubscriptionController } from '../controllers/subscription.controller.js';
+import { ISubscriptionController } from '../controllers/interface/subscription.controller.interface.js';
 import { validate } from '../middleware/zod.middleware.js';
 
 export class SubscriptionRoute {
   public readonly router: Router;
 
-  constructor(private readonly SubscriptionController: SubscriptionController) {
+  constructor(private readonly SubscriptionController: ISubscriptionController) {
     this.router = Router();
     this.initializeRoutes();
   }

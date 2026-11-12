@@ -1,27 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
-import errors from '../errors/index.js';
-import User from '../models/User.js';
-import { isPremium } from '../utils/plan.js';
 import { StatusCodes } from 'http-status-codes';
-import { UserRepository } from '../repository/user.repository.js';
-import { IUserRepository } from '../repository/interface/user.repository.interface.js';
+import errors from '../errors/index.js';
+import { IPlanService } from '../services/plan.service/interface/plan.service.interface.js';
 
-export async function requirePremium(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  const userId = req.user?.userId;
-  if (!userId) {
-    throw new errors.Unauthenticated('Not authenticated');
-  }
+export const requirePremium =
+  (planService: IPlanService) =>
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new errors.Unauthenticated('Not authenticated');
+    }
 
-  if (!isPremium(userId)) {
-    return res.status(StatusCodes.FORBIDDEN).json({
-      message: 'This feature requires a premium plan',
-      code: 'PREMIUM_REQUIRED',
-    });
-  }
+    if (!(await planService.isPremium(userId))) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: 'This feature requires a premium plan',
+        code: 'PREMIUM_REQUIRED',
+      });
+      return;
+    }
 
-  next();
-}
+    next();
+  };

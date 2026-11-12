@@ -1,11 +1,10 @@
 import { Router } from 'express';
-import express from 'express';
-import { WebhookController } from '../controllers/webhook.controller.js';
+import { IWebhookController } from '../controllers/interface/webhook.controller.interface.js';
 
 export class WebhookRoute {
   public readonly router: Router;
 
-  constructor(private readonly WebhookController: WebhookController) {
+  constructor(private readonly WebhookController: IWebhookController) {
     this.router = Router();
     this.initializeRoutes();
   }

@@ -3,12 +3,12 @@ import z, { email } from 'zod';
 export const registerSchema = z.object({
   name: z.string().max(50).trim(),
   email: z.email(),
-  password: z.string().min(8).max(24),
+  password: z.string().min(8).max(128),
 });
 
 export const loginSchema = z.object({
   email: z.email(),
-  password: z.string().min(8).max(24),
+  password: z.string().min(8).max(128),
 });
 
 export const forgotPasswordSchema = z.object({
@@ -16,7 +16,7 @@ export const forgotPasswordSchema = z.object({
 });
 
 export const resetPasswordSchema = z.object({
-  newPassword: z.string().min(8).max(24),
+  newPassword: z.string().min(8).max(128),
 });
 
 export const tokenParamsSchema = z.object({

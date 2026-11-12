@@ -89,7 +89,7 @@ export class ContactService implements IContactService {
     );
 
     if (!contact) {
-      throw new errors.Unauthenticated('Contact not found');
+      throw new errors.NotFound('Contact not found');
     }
 
     return this.toContactResponse(contact);

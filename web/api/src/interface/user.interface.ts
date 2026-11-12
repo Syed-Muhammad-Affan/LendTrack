@@ -14,6 +14,5 @@ export interface IUser extends Document {
   updatedAt: Date;
   premiumExpiresAt: Date;
 
-  createJWT(): string;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }

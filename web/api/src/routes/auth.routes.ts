@@ -9,6 +9,7 @@ import {
   tokenParamsSchema,
 } from '../validators/auth.validator.js';
 import { forgotPasswordLimiter } from '../middleware/forgotPasswordLimiter.middleware.js';
+import { resetPasswordLimiter } from '../middleware/resetPasswordLimiter.middleware.js';
 import { authMiddleware } from '../middleware/auth.js';
 
 export class AuthRoute {
@@ -49,6 +50,7 @@ export class AuthRoute {
 
     this.router.post(
       '/reset-password/:token',
+      resetPasswordLimiter,
       validate({ body: resetPasswordSchema, params: tokenParamsSchema }),
       this.AuthController.resetPassword.bind(this.AuthController),
     );

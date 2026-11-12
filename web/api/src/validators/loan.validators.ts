@@ -1,11 +1,12 @@
+import { objectIdSchema } from './common.validator.js';
 import { z } from 'zod';
 
 // POST /loans — body
 export const createLoanSchema = z
   .object({
-    itemId: z.string().min(1).optional(),
+    itemId: objectIdSchema.optional(),
     borrowedItemName: z.string().trim().min(1).max(100).optional(),
-    contactId: z.string().min(1, 'Contact is required'),
+    contactId: objectIdSchema,
     direction: z.enum(['lent_out', 'borrowed'], {
       error: 'Direction must be lent_out or borrowed',
     }),
@@ -29,9 +30,9 @@ export const createLoanSchema = z
 // PATCH /loans/:id — body
 export const updateLoanSchema = z
   .object({
-    itemId: z.string().min(1).optional(),
+    itemId: objectIdSchema.optional(),
     borrowedItemName: z.string().trim().min(1).max(100).optional(),
-    contactId: z.string().min(1).optional(),
+    contactId: objectIdSchema.optional(),
     direction: z.enum(['lent_out', 'borrowed']).optional(),
     status: z.enum(['active', 'returned', 'overdue', 'lost']).optional(),
     loanedAt: z.coerce.date().optional(),
@@ -64,7 +65,7 @@ export const updateLoanSchema = z
 // :id route params — used by getSingleLoan, updateLoan, deleteLoan, markAsReturn, markAsLost
 export const loanIdParamsSchema = z
   .object({
-    id: z.string().min(1),
+    id: objectIdSchema,
   })
   .openapi('LoanIdParams');
 
@@ -72,7 +73,7 @@ export const loanIdParamsSchema = z
 export const loanFilterSchema = z
   .object({
     status: z.enum(['active', 'returned', 'overdue', 'lost']).optional(),
-    contactId: z.string().optional(),
+    contactId: objectIdSchema.optional(),
     direction: z.enum(['lent_out', 'borrowed']).optional(),
   })
   .openapi('LoanFilter');

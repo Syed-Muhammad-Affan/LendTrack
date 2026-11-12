@@ -3,6 +3,7 @@ import app from './app.js';
 import connectDB from './db/connect.js';
 import { config } from './config/config.js';
 import { startReminderScheduler } from './services/Reminder.scheduler/reminder.scheduler.js';
+import { createReminderService } from './containers/reminder.container.js';
 
 const port = config.server.port;
 
@@ -17,7 +18,7 @@ const start = async () => {
     await connectDB(mongoURI);
     app.listen(port, () => {
       console.log(`Server is listening at port ${port}...`);
-      startReminderScheduler();
+      startReminderScheduler(createReminderService());
     });
   } catch (error) {
     if (error instanceof Error) {

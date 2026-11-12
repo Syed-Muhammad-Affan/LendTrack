@@ -1,9 +1,6 @@
-import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import { config } from '../config/config.js';
 import bcrypt from 'bcryptjs';
 import { IUser } from '../interface/user.interface.js';
-import { bool } from 'joi';
 
 const UserSchema = new mongoose.Schema<IUser>(
   {
@@ -28,7 +25,6 @@ const UserSchema = new mongoose.Schema<IUser>(
       type: String,
       required: [true, 'Please provide password'],
       minlength: 8,
-      maxlenght: 24,
     },
     avatarUrl: {
       type: String,
@@ -57,12 +53,6 @@ const UserSchema = new mongoose.Schema<IUser>(
   },
   { timestamps: true },
 );
-
-UserSchema.methods.createJWT = function () {
-  return jwt.sign({ id: this._id, name: this.name }, config.jwt.secret, {
-    expiresIn: config.jwt.lifetime,
-  });
-};
 
 UserSchema.pre('save', async function () {
   if (!this.isModified('password')) return;

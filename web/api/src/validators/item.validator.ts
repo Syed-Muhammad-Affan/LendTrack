@@ -1,9 +1,10 @@
+import { objectIdSchema, httpUrlSchema } from './common.validator.js';
 import z from 'zod';
 
 export const createItemSchema = z
   .object({
     name: z.string().max(50).trim(),
-    photo: z.string().optional(),
+    photo: httpUrlSchema.optional(),
     description: z.string().trim(),
     category: z.string().trim(),
   })
@@ -13,7 +14,7 @@ export const updateItemSchema = z
   .object({
     name: z.string().trim().min(1, 'Name cannot be empty').optional(),
 
-    photo: z.string().optional(),
+    photo: httpUrlSchema.optional(),
 
     description: z
       .string()
@@ -39,7 +40,7 @@ export const updateItemSchema = z
 
 export const itemIDParamsSchema = z
   .object({
-    id: z.string().min(1),
+    id: objectIdSchema,
   })
   .openapi('ItemIdParams');
 

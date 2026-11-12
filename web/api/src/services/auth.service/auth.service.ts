@@ -9,12 +9,14 @@ import { IGenericResponse } from './interface/genericResponse.interface.js';
 import { ILoginDTO } from './interface/loginDTO.interface.js';
 import { IRegisterDTO } from './interface/registerDTO.interface.js';
 import bcrypt from 'bcryptjs';
+import { ITokenService } from '../token.service/interface/token.service.interface.js';
 import { IUser } from '../../interface/user.interface.js';
 
 export class AuthService implements IAuthService {
   constructor(
     private readonly UserRepository: IUserRepository,
     private readonly MailerService: IMailerService,
+    private readonly TokenService: ITokenService,
   ) {}
 
   private toAuthResponse(user: IUser, token: string): AuthResponse {
@@ -47,7 +49,7 @@ export class AuthService implements IAuthService {
 
     await this.MailerService.sendWelcomeEmail(user.email, user.name);
 
-    const token = user.createJWT();
+    const token = this.TokenService.sign({ id: user._id.toString(), name: user.name });
 
     return this.toAuthResponse(user, token);
   }
@@ -61,23 +63,16 @@ export class AuthService implements IAuthService {
       throw new errors.Unauthenticated('Invalid Credential');
     }
 
-    console.log('LOGIN USER:', {
-      id: user._id.toString(),
-      name: user.name,
-      email: user.email,
-    });
 
     const isPasswordCorrect = await user.comparePassword(password);
 
-    console.log('PASSWORD MATCH:', isPasswordCorrect);
 
     if (!isPasswordCorrect) {
       throw new errors.Unauthenticated('Invalid Credential');
     }
 
-    const token = user.createJWT();
+    const token = this.TokenService.sign({ id: user._id.toString(), name: user.name });
 
-    console.log('NEW TOKEN CREATED FOR:', user._id.toString());
 
     return this.toAuthResponse(user, token);
   }

@@ -2,14 +2,11 @@ import { Types } from 'mongoose';
 import { IUser } from '../interface/user.interface.js';
 import User from '../models/User.js';
 import { IUserRepository } from './interface/user.repository.interface.js';
+import { IDigestUserRepository } from './interface/digest.user.repository.interface.js';
 
-export class UserRepository implements IUserRepository {
+export class UserRepository implements IUserRepository, IDigestUserRepository {
   async createUser(userData: Partial<IUser>): Promise<IUser> {
     return await User.create(userData);
-  }
-
-  async getAllUser(): Promise<IUser[] | null> {
-    return await User.find();
   }
 
   async getSingleUserByEmail(email: string): Promise<IUser | null> {

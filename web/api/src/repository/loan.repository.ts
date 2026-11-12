@@ -3,10 +3,11 @@ import { ILoan } from '../interface/loan.interface.js';
 import Loan from '../models/Loan.js';
 import { ILoanFilters } from './interface/loan.filter.interface.js';
 import { ILoanRepository } from './interface/loan.repository.interface.js';
+import { ILoanReminderRepository } from './interface/loan.reminder.repository.interface.js';
 import { ILoanSummary } from './interface/loan.summary.interface.js';
 import { ILoanPopulated } from '../interface/loan.populated.interface.js';
 
-export class LoanRepository implements ILoanRepository {
+export class LoanRepository implements ILoanRepository, ILoanReminderRepository {
   async createLoan(body: Partial<ILoan>): Promise<ILoanPopulated> {
     const loan = await Loan.create(body);
     return loan.populate(['itemId', 'contactId']) as unknown as ILoanPopulated;
@@ -205,12 +206,36 @@ export class LoanRepository implements ILoanRepository {
     return result !== null;
   }
 
-  async getLoansMatching(
+  private async findPopulated(
     query: Record<string, unknown>,
   ): Promise<ILoanPopulated[]> {
     return (await Loan.find(query)
       .populate('itemId')
       .populate('contactId')) as unknown as ILoanPopulated[];
+  }
+
+  async getActiveLoansDueBetween(
+    from: Date,
+    to: Date,
+  ): Promise<ILoanPopulated[]> {
+    return this.findPopulated({
+      status: 'active',
+      expectedReturnAt: { $gte: from, $lte: to },
+    });
+  }
+
+  async getUnreturnedLoansPastDue(now: Date): Promise<ILoanPopulated[]> {
+    return this.findPopulated({
+      status: { $in: ['active', 'overdue'] },
+      expectedReturnAt: { $lt: now },
+    });
+  }
+
+  async getOutstandingLoansForUser(userId: string): Promise<ILoanPopulated[]> {
+    return this.findPopulated({
+      userId: new Types.ObjectId(userId),
+      status: { $in: ['active', 'overdue'] },
+    });
   }
 
   async markOverdueLoans(now: Date): Promise<number> {

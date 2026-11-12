@@ -1,3 +1,4 @@
+import { objectIdSchema } from './common.validator.js';
 import z from 'zod';
 
 export const createContactSchema = z
@@ -11,7 +12,7 @@ export const createContactSchema = z
 
 export const contactParamsSchema = z
   .object({
-    id: z.string().min(1),
+    id: objectIdSchema,
   })
   .openapi('ContactParams');
 
