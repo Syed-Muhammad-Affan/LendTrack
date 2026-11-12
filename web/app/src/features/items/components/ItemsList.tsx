@@ -39,7 +39,7 @@ export function ItemsList({ items }: ItemsListProps) {
     <section>
       <Container className="pb-24">
         {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-8 text-center">
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-8 text-center w-full">
             <p className="text-sm text-muted-foreground">No items found.</p>
           </div>
         ) : (
