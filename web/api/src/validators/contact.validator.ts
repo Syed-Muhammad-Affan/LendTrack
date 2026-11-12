@@ -22,7 +22,7 @@ export const updateContactSchema = z
 
     email: z.string().email('Invalid email').optional(),
 
-    phoneNumber: z
+    phone: z
       .string()
       .trim()
       .min(1, 'Phone number cannot be empty')
@@ -34,7 +34,7 @@ export const updateContactSchema = z
     (data) =>
       data.name !== undefined ||
       data.email !== undefined ||
-      data.phoneNumber !== undefined ||
+      data.phone !== undefined ||
       data.notes !== undefined,
     {
       message: 'At least one field is required to update',
